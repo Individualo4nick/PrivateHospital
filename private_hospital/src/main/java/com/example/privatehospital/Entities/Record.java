@@ -17,10 +17,8 @@ public class Record {
     private String description;
     private String service;
     private Integer price;
-    @OneToOne
-    @JoinColumn(name = "staff_id")
-    private Staff staff;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "staff_id")
+    private Long staffId;
+    @Column(name = "user_id")
+    private Long userId;
 }

@@ -1,4 +1,4 @@
-package com.example.privatehospital.Entities.Enums;
+package com.example.authorization.domain.entity.Enums;
 
 import org.springframework.security.core.GrantedAuthority;
 
