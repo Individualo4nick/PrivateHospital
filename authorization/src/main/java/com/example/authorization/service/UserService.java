@@ -11,7 +11,7 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepo userRepo;
-    Optional<User> getByEmail(String email){
-        return userRepo.getUserByEmail(email);
+    Optional<User> getByLogin(String login){
+        return userRepo.getUserByLogin(login);
     }
 }

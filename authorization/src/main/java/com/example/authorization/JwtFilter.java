@@ -28,15 +28,10 @@ public class JwtFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, jakarta.servlet.ServletException {
-        System.out.println("Я В ФИЛЬТРЕ");
         final String token = getTokenFromRequest((HttpServletRequest) request);
-        System.out.println("ДО ВАЛИДАЦИИ");
         if (token != null && jwtProvider.validateAccessToken(token)) {
-            System.out.println("ПОСЛЕ ВАЛИДАЦИИ");
             final Claims claims = jwtProvider.getAccessClaims(token);
-            System.out.println("ПОСЛЕ CLAIMS");
             final JwtAuthentification jwtInfoToken = JwtUtils.generate(claims);
-            System.out.println("ПОСЛЕ JWT");
             jwtInfoToken.setAuthenticated(true);
             SecurityContextHolder.getContext().setAuthentication(jwtInfoToken);
         }

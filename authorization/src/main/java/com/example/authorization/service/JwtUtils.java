@@ -17,13 +17,11 @@ public final class JwtUtils {
     public static JwtAuthentification generate(Claims claims) {
         final JwtAuthentification jwtInfoToken = new JwtAuthentification();
         jwtInfoToken.setRoles(getRoles(claims));
-        jwtInfoToken.setFirstName(claims.get("firstName", String.class));
-        jwtInfoToken.setUsername(claims.getSubject());
+        jwtInfoToken.setLogin(claims.getSubject());
         return jwtInfoToken;
     }
 
     private static Set<Role> getRoles(Claims claims) {
-        System.out.println(claims.toString());
         final List<String> roles = new ArrayList<>();
         final String role = claims.get("roles", String.class);
         roles.add(role);
