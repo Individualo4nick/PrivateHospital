@@ -1,5 +1,6 @@
 package com.example.authorization.service;
 
+import com.example.authorization.config.SecurityConfig;
 import com.example.authorization.controller.exc.AuthException;
 import com.example.authorization.domain.entity.User;
 import com.example.authorization.domain.jwt.JwtAuthentification;
@@ -23,10 +24,9 @@ public class AuthService {
     private final JwtProvider jwtProvider;
 
     public JwtResponse login(@NonNull JwtRequest authRequest) throws AuthException {
-        System.out.println(userService.getByLogin(authRequest.getLogin()));
         final User user = userService.getByLogin(authRequest.getLogin())
-                .orElseThrow(() -> new AuthException("Неправильный логин"));;
-        if (user.getPassword().equals(authRequest.getPassword())) {
+                .orElseThrow(() -> new AuthException("Неправильный логин"));
+        if (SecurityConfig.passwordEncoder().matches(authRequest.getPassword(), user.getPassword())) {
             final String accessToken = jwtProvider.generateAccessToken(user);
             final String refreshToken = jwtProvider.generateRefreshToken(user);
             refreshStorage.put(user.getLogin(), refreshToken);
