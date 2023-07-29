@@ -38,7 +38,7 @@ public class JwtProvider {
 
     public String generateAccessToken(@NonNull User user) {
         final LocalDateTime now = LocalDateTime.now();
-        final Instant accessExpirationInstant = now.plusMinutes(5).atZone(ZoneId.systemDefault()).toInstant();
+        final Instant accessExpirationInstant = now.plusMinutes(10).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
         return Jwts.builder()
                 .setSubject(user.getLogin())
@@ -51,7 +51,7 @@ public class JwtProvider {
 
     public String generateRefreshToken(@NonNull User user) {
         final LocalDateTime now = LocalDateTime.now();
-        final Instant refreshExpirationInstant = now.plusDays(30).atZone(ZoneId.systemDefault()).toInstant();
+        final Instant refreshExpirationInstant = now.plusDays(1).atZone(ZoneId.systemDefault()).toInstant();
         final Date refreshExpiration = Date.from(refreshExpirationInstant);
         return Jwts.builder()
                 .setSubject(user.getLogin())
@@ -60,12 +60,22 @@ public class JwtProvider {
                 .compact();
     }
 
-    public boolean validateAccessToken(@NonNull String accessToken) {
-        return validateToken(accessToken, jwtAccessSecret);
+    public boolean validateAccessToken(@NonNull String accessToken) throws ExpiredJwtException {
+        try {
+            return validateToken(accessToken, jwtAccessSecret);
+        }
+        catch (ExpiredJwtException expEx){
+            throw expEx;
+        }
     }
 
     public boolean validateRefreshToken(String refreshToken) {
-        return validateToken(refreshToken, jwtRefreshSecret);
+        try {
+            return validateToken(refreshToken, jwtRefreshSecret);
+        }
+        catch (ExpiredJwtException expEx){
+            throw expEx;
+        }
     }
 
     private boolean validateToken(@NonNull String token, @NonNull Key secret) {
@@ -77,6 +87,7 @@ public class JwtProvider {
             return true;
         } catch (ExpiredJwtException expEx) {
             log.error("Token expired", expEx);
+            throw expEx;
         } catch (UnsupportedJwtException unsEx) {
             log.error("Unsupported jwt", unsEx);
         } catch (MalformedJwtException mjEx) {

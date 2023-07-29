@@ -8,46 +8,46 @@ import com.example.authorization.domain.jwt.JwtResponse;
 import com.example.authorization.domain.jwt.RefreshJwtRequest;
 import com.example.authorization.service.AuthService;
 import com.example.authorization.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
     private final UserService userService;
-    @GetMapping("login")
+
+    @GetMapping("/main")
+    public String mainPage(){
+        return "main";
+    }
+    @GetMapping("/login")
     public String login(){
         return "login";
     }
 
-    @PostMapping("login")
-    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest authRequest) throws AuthException {
+    @PostMapping("/login")
+    public String login(JwtRequest authRequest, HttpServletResponse response) throws AuthException {
         final JwtResponse token = authService.login(authRequest);
-        return ResponseEntity.ok(token);
+        Cookie cookie = new Cookie("tokens", token.toString());
+        cookie.setMaxAge(3600);
+        response.addCookie(cookie);
+        return "redirect:/api/auth/main";
     }
 
-    @PostMapping("token")
-    public ResponseEntity<JwtResponse> getNewAccessToken(@RequestBody RefreshJwtRequest request) throws AuthException {
-        final JwtResponse token = authService.getAccessToken(request.getRefreshToken());
-        return ResponseEntity.ok(token);
-    }
-
-    @PostMapping("refresh")
-    public ResponseEntity<JwtResponse> getNewRefreshToken(@RequestBody RefreshJwtRequest request) throws AuthException {
-        final JwtResponse token = authService.refresh(request.getRefreshToken());
-        return ResponseEntity.ok(token);
-    }
-
-    @GetMapping("registration")
+    @GetMapping("/registration")
     public String getRegistration(){
         return "registration";
     }
 
-    @PostMapping("registration")
+    @PostMapping("/registration")
     public String postRegistration(User user){
         userService.saveUser(user);
         return "login";

@@ -7,6 +7,7 @@ import com.example.authorization.domain.jwt.JwtAuthentification;
 import com.example.authorization.domain.jwt.JwtRequest;
 import com.example.authorization.domain.jwt.JwtResponse;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,35 +38,23 @@ public class AuthService {
     }
 
     public JwtResponse getAccessToken(@NonNull String refreshToken) throws AuthException {
-        if (jwtProvider.validateRefreshToken(refreshToken)) {
-            final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
-            final String login = claims.getSubject();
-            final String saveRefreshToken = refreshStorage.get(login);
-            if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                final User user = userService.getByLogin(login).
-                        orElseThrow(() -> new AuthException("Пользователь не найден"));;
-                final String accessToken = jwtProvider.generateAccessToken(user);
-                return new JwtResponse(accessToken, null);
+        try {
+            if (jwtProvider.validateRefreshToken(refreshToken)) {
+                final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
+                final String login = claims.getSubject();
+                final String saveRefreshToken = refreshStorage.get(login);
+                if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
+                    final User user = userService.getByLogin(login).
+                            orElseThrow(() -> new AuthException("Пользователь не найден"));
+                    final String accessToken = jwtProvider.generateAccessToken(user);
+                    return new JwtResponse(accessToken, null);
+                }
             }
+        }
+        catch (ExpiredJwtException expEx){
+            throw expEx;
         }
         return new JwtResponse(null, null);
-    }
-
-    public JwtResponse refresh(String refreshToken) throws AuthException {
-        if (jwtProvider.validateRefreshToken(refreshToken)) {
-            final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
-            final String login = claims.getSubject();
-            final String saveRefreshToken = refreshStorage.get(login);
-            if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                final User user = userService.getByLogin(login)
-                        .orElseThrow(() -> new AuthException("Пользователь не найден"));
-                final String accessToken = jwtProvider.generateAccessToken(user);
-                final String newRefreshToken = jwtProvider.generateRefreshToken(user);
-                refreshStorage.put(user.getLogin(), newRefreshToken);
-                return new JwtResponse(accessToken, newRefreshToken);
-            }
-        }
-        throw new AuthException("Невалидный JWT токен");
     }
 
     public JwtAuthentification getAuthInfo() {
