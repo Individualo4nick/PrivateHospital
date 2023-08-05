@@ -13,10 +13,12 @@ public class Comment{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
-    @Column(name = "staff_id")
-    private Long staffId;
-    @Column(name = "user_id")
-    private Long userId;
+    @OneToOne
+    @JoinColumn(name = "staff_id")
+    private Staff staff;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
     private String text;
 
 }

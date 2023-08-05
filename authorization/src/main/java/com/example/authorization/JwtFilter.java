@@ -36,8 +36,8 @@ public class JwtFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain){
         Cookie[] cookies = ((HttpServletRequest) request).getCookies();
-        if (cookies != null) {
-            String token = cookies[0].getValue();
+        if (cookies!= null && getCookieWithTokens(cookies)!=null) {
+            String token = getCookieWithTokens(cookies).getValue();
             String accessToken = token.split("--ACCESS--")[1].split("--REFRESH--")[0];
             String refreshToken = token.split("--ACCESS--")[1].split("--REFRESH--")[1];
             if (accessToken != null) {
@@ -50,7 +50,8 @@ public class JwtFilter extends GenericFilterBean {
                         accessToken = jwtResponse.getAccessToken();
                         Cookie cookie = new Cookie("tokens", "--TYPE--Bearer--ACCESS--"+accessToken+"--REFRESH--"+refreshToken);
                         cookie.setMaxAge(3600);
-                        HttpServletResponse response1 = (HttpServletResponse)response;
+                        cookie.setHttpOnly(true);
+                        HttpServletResponse response1 = (HttpServletResponse) response;
                         response1.addCookie(cookie);
                     }
                     catch (ExpiredJwtException expEx1){
@@ -70,6 +71,15 @@ public class JwtFilter extends GenericFilterBean {
         final String bearer = request.getHeader(AUTHORIZATION);
         if (StringUtils.hasText(bearer) && bearer.startsWith("Bearer ")) {
             return bearer.substring(7);
+        }
+        return null;
+    }
+
+    private Cookie getCookieWithTokens(Cookie[] cookies){
+        for (Cookie cookie : cookies){
+            if (cookie.getName().equals("tokens")){
+                return cookie;
+            }
         }
         return null;
     }
