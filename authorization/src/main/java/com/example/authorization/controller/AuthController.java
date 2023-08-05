@@ -6,21 +6,13 @@ import com.example.authorization.domain.entity.Enums.Role;
 import com.example.authorization.domain.entity.User;
 import com.example.authorization.domain.jwt.JwtRequest;
 import com.example.authorization.domain.jwt.JwtResponse;
-import com.example.authorization.domain.jwt.RefreshJwtRequest;
 import com.example.authorization.dtos.IdDto;
 import com.example.authorization.service.AuthService;
 import com.example.authorization.service.UserService;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -68,18 +60,24 @@ public class AuthController {
     }
 
     @GetMapping("/registration")
-    public String getRegistration(Model model, JwtRequest authRequest){
-        model.addAttribute("authRequest", authRequest);
+    public String getRegistration(Model model, @ModelAttribute("user") User user){
+        model.addAttribute("user", user);
         return "registration";
     }
 
     @PostMapping(value = "/registration")
-    public String postRegistration(@Validated User user){
+    public String postRegistration(@Validated User user, BindingResult bindingResult,
+                                   RedirectAttributes redirectAttributes, HttpServletResponse response){
+        if (bindingResult.hasErrors()){
+            redirectAttributes.addFlashAttribute("user", user);
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            return "redirect:/api/auth/registration";
+        }
         user.setRole(Role.valueOf("USER"));
         userService.saveUser(user);
         IdDto idDto = new IdDto();
         idDto.id = userService.getByLogin(user.getLogin()).get().getId();
-        Integer a = webClient.post()
+        webClient.post()
                 .uri("/server/registration")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(idDto), IdDto.class)
