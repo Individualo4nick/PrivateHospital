@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль</title>
+</head>
+<body>
+<div th:object="${user}">
+    <p th:text="*{'Email: ' + email}"></p>
+    <p th:text="*{'Name: ' + name}"></p>
+    <p th:text="*{'Surname: ' + surname}"></p>
+    <p>Your records: </p>
+    <div th:each="record: *{records}">
+        <p th:text="record.visitDate"></p>
+    </div>
+</div>
+</body>
+</html>

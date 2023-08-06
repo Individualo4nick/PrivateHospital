@@ -4,8 +4,6 @@ import com.example.privatehospital.Entities.User;
 import com.example.privatehospital.Repositories.UserRepository;
 import com.example.privatehospital.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,5 +14,9 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setId(id);
         userRepository.save(user);
+    }
+
+    public User getUserInfo(Long id) {
+        return userRepository.getUserById(id);
     }
 }

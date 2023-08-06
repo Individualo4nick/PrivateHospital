@@ -23,7 +23,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import reactor.core.publisher.Mono;
 
 @Controller
-@RequestMapping("api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -47,7 +46,7 @@ public class AuthController {
         if (bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("authRequest", authRequest);
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/api/auth/login";
+            return "redirect:/login";
         }
         else {
             final JwtResponse token = authService.login(authRequest);
@@ -55,7 +54,7 @@ public class AuthController {
             cookie.setMaxAge(3600);
             cookie.setHttpOnly(true);
             response.addCookie(cookie);
-            return "redirect:/api/auth/main";
+            return "redirect:/main";
         }
     }
 
@@ -71,7 +70,7 @@ public class AuthController {
         if (bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("user", user);
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/api/auth/registration";
+            return "redirect:/registration";
         }
         user.setRole(Role.valueOf("USER"));
         userService.saveUser(user);
@@ -84,7 +83,7 @@ public class AuthController {
                 .retrieve()
                 .bodyToMono(Integer.class)
                 .block();
-        return "redirect:/api/auth/login";
+        return "redirect:/login";
     }
 
 }

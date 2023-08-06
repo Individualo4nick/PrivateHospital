@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
     <title>Log-in</title>
 </head>
 <body>
-<form th:action="@{/api/auth/login}" method="post" th:object="${authRequest}">
+<form th:action="@{/login}" method="post" th:object="${authRequest}">
     <div><label for="login"> Username:
         <input type="text" id="login" name="login" required th:value="*{login}"/>
     </label></div>
