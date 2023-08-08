@@ -22,8 +22,14 @@ public class UserController {
         return Response.SC_OK;
     }
 
-    @GetMapping(value = "/user/{id}")
+    @GetMapping(value = "/users/{id}")
     public User getUserInfo(@PathVariable Long id){
         return userService.getUserInfo(id);
+    }
+    @PutMapping(value = "/users")
+    public Integer updateUser(@RequestBody User user){
+        System.out.println(user.getEmail());
+        userService.saveUser(user);
+        return Response.SC_OK;
     }
 }

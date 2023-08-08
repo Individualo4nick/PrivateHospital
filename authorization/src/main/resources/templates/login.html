@@ -14,7 +14,7 @@
     <div><input type="submit" value="Sign In"/></div>
 </form>
 <div th:if="${errors}">
-    <p>При заполнении полей обнаружены следующие ошибки (каждая строка с ошибкой для своего поля):</p>
+    <p>Errors:</p>
     <p style="color: red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Errors</p>
 </div>
 </body>
