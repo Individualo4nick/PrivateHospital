@@ -6,22 +6,21 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
+@Accessors(chain = true)
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "login", unique = true, nullable = false)
-    @NotNull
-    @Size(min = 3, max = 64)
     private String login;
-    @NotNull
-    @Size(min = 6, max= 20)
     private String password;
+    @Enumerated(EnumType.STRING)
     private Role role;
 }

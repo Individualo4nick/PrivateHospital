@@ -5,16 +5,17 @@
     <title>Profile</title>
 </head>
 <body>
-<div th:object="${user}">
+<div th:object="${staff}">
     <p th:text="*{'Email: ' + email}"></p>
     <p th:text="*{'Name: ' + name}"></p>
     <p th:text="*{'Surname: ' + surname}"></p>
-    <p th:text="*{'Birth date: ' + birthDate}"></p>
+    <p th:text="*{'Position: ' + position}"></p>
+    <p th:text="*{'Department: ' + department}"></p>
     <p>Your records: </p>
     <div th:each="record: *{records}">
-        <p th:text="record.visitDate"></p>
+        <p th:text="record.date"></p>
     </div>
 </div>
-<a href="/api/user/edit_profile">Edit</a>
+<a href="/api/staff/edit_profile">Edit</a>
 </body>
 </html>

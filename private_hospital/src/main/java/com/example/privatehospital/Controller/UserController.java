@@ -16,19 +16,18 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/registration")
+    @PostMapping(value = "/user/registration")
     public Integer saveUser(@RequestBody IdDto idDto){
         userService.saveUserById(idDto.id);
         return Response.SC_OK;
     }
 
-    @GetMapping(value = "/users/{id}")
+    @GetMapping(value = "/user/{id}")
     public User getUserInfo(@PathVariable Long id){
         return userService.getUserInfo(id);
     }
-    @PutMapping(value = "/users")
+    @PutMapping(value = "/user")
     public Integer updateUser(@RequestBody User user){
-        System.out.println(user.getEmail());
         userService.saveUser(user);
         return Response.SC_OK;
     }

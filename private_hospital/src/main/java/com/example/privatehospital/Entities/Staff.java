@@ -13,6 +13,7 @@ import java.util.List;
 public class Staff {
     @Id
     private Long id;
+    private String email;
     private String name;
     private String surname;
     private String position;

@@ -7,6 +7,7 @@ import com.example.authorization.domain.entity.User;
 import com.example.authorization.domain.jwt.JwtRequest;
 import com.example.authorization.domain.jwt.JwtResponse;
 import com.example.authorization.dtos.IdDto;
+import com.example.authorization.dtos.UserRegisterDto;
 import com.example.authorization.service.AuthService;
 import com.example.authorization.service.UserService;
 import jakarta.servlet.http.Cookie;
@@ -31,11 +32,12 @@ public class AuthController {
     private WebClient webClient = WebClient.create("http://localhost:8888");
 
     @GetMapping("/main")
-    public String mainPage(){
+    public String mainPage() {
         return "main";
     }
+
     @GetMapping("/login")
-    public String login(Model model, @ModelAttribute("authRequest") JwtRequest authRequest){
+    public String login(Model model, @ModelAttribute("authRequest") JwtRequest authRequest) {
         model.addAttribute("authRequest", authRequest);
         return "login";
     }
@@ -43,12 +45,11 @@ public class AuthController {
     @PostMapping("/login")
     public String login(@Validated JwtRequest authRequest, BindingResult bindingResult,
                         RedirectAttributes redirectAttributes, HttpServletResponse response) throws AuthException {
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("authRequest", authRequest);
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/login";
-        }
-        else {
+        } else {
             final JwtResponse token = authService.login(authRequest);
             Cookie cookie = new Cookie("tokens", token.toString());
             cookie.setMaxAge(3600);
@@ -59,25 +60,25 @@ public class AuthController {
     }
 
     @GetMapping("/registration")
-    public String getRegistration(Model model, @ModelAttribute("user") User user){
-        model.addAttribute("user", user);
+    public String getRegistration(Model model, @ModelAttribute("user") UserRegisterDto userReg) {
+        model.addAttribute("user", userReg);
+        model.addAttribute("roles", Role.getRoles());
         return "registration";
     }
 
     @PostMapping(value = "/registration")
-    public String postRegistration(@Validated User user, BindingResult bindingResult,
-                                   RedirectAttributes redirectAttributes, HttpServletResponse response){
-        if (bindingResult.hasErrors()){
-            redirectAttributes.addFlashAttribute("user", user);
+    public String postRegistration(@Validated UserRegisterDto userReg, BindingResult bindingResult,
+                                   RedirectAttributes redirectAttributes, HttpServletResponse response) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("user", userReg);
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/registration";
         }
-        user.setRole(Role.valueOf("USER"));
-        userService.saveUser(user);
+        userService.saveUser(userReg);
         IdDto idDto = new IdDto();
-        idDto.id = userService.getByLogin(user.getLogin()).get().getId();
+        idDto.id = userService.getByLogin(userReg.getLogin()).get().getId();
         webClient.post()
-                .uri("/server/registration")
+                .uri("/server/" + userReg.getRole().toString().toLowerCase() + "/registration")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(idDto), IdDto.class)
                 .retrieve()
@@ -85,5 +86,4 @@ public class AuthController {
                 .block();
         return "redirect:/login";
     }
-
 }

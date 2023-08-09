@@ -5,9 +5,9 @@
     <title>Title</title>
 </head>
 <body>
-<form th:action="@{/api/user/edit_profile}" method="post" th:object="${userInfoDto}">
+<form th:action="@{/api/staff/edit_profile}" method="post" th:object="${staffDto}">
     <label for="email">Email
-    <input type="email" name="email" id="email" th:value="*{email}">
+        <input type="email" name="email" id="email" th:value="*{email}">
     </label>
 
     <label for="name">Name
@@ -18,8 +18,12 @@
         <input type="text" name="surname" id="surname" th:value="*{surname}">
     </label>
 
-    <label for="birthDate">Birth date
-        <input type="date" name="birthDate" id="birthDate" th:value="*{birthDate}">
+    <label for="position">Position
+        <input type="text" name="position" id="position" th:value="*{position}">
+    </label>
+
+    <label for="department">Department
+        <input type="text" name="department" id="department" th:value="*{department}">
     </label>
 
     <input type="submit" value="Edit"/>

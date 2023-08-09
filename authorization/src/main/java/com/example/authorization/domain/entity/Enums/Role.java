@@ -11,4 +11,7 @@ public enum Role implements GrantedAuthority {
     public String getAuthority() {
         return name();
     }
+    public static String[] getRoles(){
+        return new String[]{String.valueOf(STAFF), String.valueOf(USER)};
+    }
 }
