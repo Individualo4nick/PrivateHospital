@@ -6,17 +6,13 @@ import com.example.authorization.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import reactor.core.publisher.Mono;
 
 @Controller
@@ -24,15 +20,16 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UserController  {
 
+
     private final UserService userService;
-    private WebClient webClient = WebClient.create("http://localhost:8888");
+    private final WebClient webClient = WebClient.create("http://localhost:8888");
+
 
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/profile")
     public String profilePage(Model model){
-        String login = SecurityContextHolder.getContext().getAuthentication().getName();
         IdDto idDto = new IdDto();
-        idDto.id = userService.getByLogin(login).get().getId();
+        idDto.id = userService.getUserId();
         UserInfoDto userInfoDto = webClient.get()
                 .uri("/server/user/" + idDto.id.toString())
                 .retrieve()
@@ -43,9 +40,7 @@ public class UserController  {
     }
     @PostMapping("/edit_profile")
     public String editProfilePage(UserInfoDto userInfoDto){
-        System.out.println(userInfoDto.birthDate);
-        String login = SecurityContextHolder.getContext().getAuthentication().getName();
-        userInfoDto.id = userService.getByLogin(login).get().getId();
+        userInfoDto.id = userService.getUserId();
         webClient.put()
                 .uri("/server/user")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -58,9 +53,8 @@ public class UserController  {
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/edit_profile")
     public String getEditProfilePage(Model model, @ModelAttribute("userInfoDto") UserInfoDto userInfoDto){
-        String login = SecurityContextHolder.getContext().getAuthentication().getName();
         IdDto idDto = new IdDto();
-        idDto.id = userService.getByLogin(login).get().getId();
+        idDto.id = userService.getUserId();
         userInfoDto = webClient.get()
                 .uri("/server/user/" + idDto.id.toString())
                 .retrieve()

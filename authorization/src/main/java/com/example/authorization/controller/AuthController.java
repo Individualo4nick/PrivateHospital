@@ -3,7 +3,6 @@ package com.example.authorization.controller;
 
 import com.example.authorization.controller.exc.AuthException;
 import com.example.authorization.domain.entity.Enums.Role;
-import com.example.authorization.domain.entity.User;
 import com.example.authorization.domain.jwt.JwtRequest;
 import com.example.authorization.domain.jwt.JwtResponse;
 import com.example.authorization.dtos.IdDto;
@@ -29,7 +28,8 @@ public class AuthController {
 
     private final AuthService authService;
     private final UserService userService;
-    private WebClient webClient = WebClient.create("http://localhost:8888");
+    private final WebClient webClient = WebClient.create("http://localhost:8888");
+
 
     @GetMapping("/main")
     public String mainPage() {
@@ -68,7 +68,7 @@ public class AuthController {
 
     @PostMapping(value = "/registration")
     public String postRegistration(@Validated UserRegisterDto userReg, BindingResult bindingResult,
-                                   RedirectAttributes redirectAttributes, HttpServletResponse response) {
+                                   RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("user", userReg);
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());

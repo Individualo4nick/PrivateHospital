@@ -6,7 +6,6 @@ import com.example.authorization.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,14 +21,14 @@ import reactor.core.publisher.Mono;
 public class StaffController {
 
     private final UserService userService;
-    private WebClient webClient = WebClient.create("http://localhost:8888");
+    private final WebClient webClient = WebClient.create("http://localhost:8888");
+
 
     @PreAuthorize("hasAuthority('STAFF')")
     @GetMapping("/profile")
     public String profilePage(Model model){
-        String login = SecurityContextHolder.getContext().getAuthentication().getName();
         IdDto idDto = new IdDto();
-        idDto.id = userService.getByLogin(login).get().getId();
+        idDto.id = userService.getUserId();
         StaffDto staffDto = webClient.get()
                 .uri("/server/staff/" + idDto.id.toString())
                 .retrieve()
@@ -40,8 +39,7 @@ public class StaffController {
     }
     @PostMapping("/edit_profile")
     public String editProfilePage(StaffDto staffDto){
-        String login = SecurityContextHolder.getContext().getAuthentication().getName();
-        staffDto.id = userService.getByLogin(login).get().getId();
+        staffDto.id = userService.getUserId();
         webClient.put()
                 .uri("/server/staff")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -54,9 +52,8 @@ public class StaffController {
     @PreAuthorize("hasAuthority('STAFF')")
     @GetMapping("/edit_profile")
     public String getEditProfilePage(Model model, @ModelAttribute("staffDto") StaffDto staffDto){
-        String login = SecurityContextHolder.getContext().getAuthentication().getName();
         IdDto idDto = new IdDto();
-        idDto.id = userService.getByLogin(login).get().getId();
+        idDto.id = userService.getUserId();
         staffDto = webClient.get()
                 .uri("/server/staff/" + idDto.id.toString())
                 .retrieve()
