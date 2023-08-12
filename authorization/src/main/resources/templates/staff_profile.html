@@ -6,6 +6,7 @@
 </head>
 <body>
 <div th:object="${staff}">
+    <img width="200" height="200" th:src="${'/api/staff/staff_image/' + id}">
     <p th:text="*{'Email: ' + email}"></p>
     <p th:text="*{'Name: ' + name}"></p>
     <p th:text="*{'Surname: ' + surname}"></p>

@@ -6,6 +6,10 @@ import com.example.privatehospital.Services.StaffService;
 import org.apache.catalina.connector.Response;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
 @RestController
 @RequestMapping("/server")
 public class StaffController {
@@ -29,5 +33,11 @@ public class StaffController {
     public Integer updateStaff(@RequestBody Staff staff){
         staffService.saveStaff(staff);
         return Response.SC_OK;
+    }
+    @GetMapping("/staff_image/{name}")
+    @ResponseBody
+    public byte[] getStaffImage(@PathVariable String name) throws IOException {
+        File serverFile = staffService.getStaffImage(name);
+        return Files.readAllBytes(serverFile.toPath());
     }
 }

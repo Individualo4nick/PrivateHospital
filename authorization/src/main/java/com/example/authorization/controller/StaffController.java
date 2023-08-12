@@ -4,16 +4,16 @@ import com.example.authorization.dtos.IdDto;
 import com.example.authorization.dtos.StaffDto;
 import com.example.authorization.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.io.IOException;
 
 @Controller
 @RequestMapping("api/staff")
@@ -21,7 +21,7 @@ import reactor.core.publisher.Mono;
 public class StaffController {
 
     private final UserService userService;
-    private final WebClient webClient = WebClient.create("http://localhost:8888");
+    private WebClient webClient = WebClient.create("http://localhost:8888");
 
 
     @PreAuthorize("hasAuthority('STAFF')")
@@ -35,6 +35,7 @@ public class StaffController {
                 .bodyToMono(StaffDto.class)
                 .block();
         model.addAttribute("staff", staffDto);
+        model.addAttribute("id", staffDto.id);
         return "staff_profile";
     }
     @PostMapping("/edit_profile")
@@ -61,6 +62,15 @@ public class StaffController {
                 .block();
         model.addAttribute("staffDto", staffDto);
         return "staff_edit";
+    }
+    @GetMapping("/staff_image/{name}")
+    @ResponseBody
+    public byte[] getUserImage(@PathVariable String name) throws IOException {
+        return webClient.get()
+                .uri("/server/staff_image/" + name)
+                .retrieve()
+                .bodyToMono(ByteArrayResource.class)
+                .map(ByteArrayResource::getByteArray).block();
     }
 }
 

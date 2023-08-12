@@ -36,11 +36,9 @@ public class JwtFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain){
         Cookie[] cookies = ((HttpServletRequest) request).getCookies();
-        if (cookies!= null && getCookieWithTokens(cookies)!=null) {
-            String token = getCookieWithTokens(cookies).getValue();
-            String accessToken = token.split("--ACCESS--")[1].split("--REFRESH--")[0];
-            String refreshToken = token.split("--ACCESS--")[1].split("--REFRESH--")[1];
-            if (accessToken != null) {
+        if (cookies!= null && getAccess(cookies)!=null && getRefresh(cookies)!=null) {
+            String accessToken = getAccess(cookies);
+            String refreshToken = getRefresh(cookies);
                 try {
                     jwtProvider.validateAccessToken(accessToken);
                 }
@@ -48,7 +46,7 @@ public class JwtFilter extends GenericFilterBean {
                     try {
                         JwtResponse jwtResponse = authService.getAccessToken(refreshToken);
                         accessToken = jwtResponse.getAccessToken();
-                        Cookie cookie = new Cookie("tokens", "--TYPE--Bearer--ACCESS--"+accessToken+"--REFRESH--"+refreshToken);
+                        Cookie cookie = new Cookie("access", accessToken);
                         cookie.setMaxAge(3600);
                         cookie.setHttpOnly(true);
                         HttpServletResponse response1 = (HttpServletResponse) response;
@@ -63,7 +61,6 @@ public class JwtFilter extends GenericFilterBean {
                 final JwtAuthentification jwtInfoToken = JwtUtils.generate(claims);
                 jwtInfoToken.setAuthenticated(true);
                 SecurityContextHolder.getContext().setAuthentication(jwtInfoToken);
-            }
         }
         chain.doFilter(request, response);
     }
@@ -79,6 +76,23 @@ public class JwtFilter extends GenericFilterBean {
         for (Cookie cookie : cookies){
             if (cookie.getName().equals("tokens")){
                 return cookie;
+            }
+        }
+        return null;
+    }
+
+    private String getAccess(Cookie[] cookies){
+        for (Cookie cookie : cookies){
+            if (cookie.getName().equals("access")){
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
+    private String getRefresh(Cookie[] cookies){
+        for (Cookie cookie : cookies){
+            if (cookie.getName().equals("refresh")){
+                return cookie.getValue();
             }
         }
         return null;

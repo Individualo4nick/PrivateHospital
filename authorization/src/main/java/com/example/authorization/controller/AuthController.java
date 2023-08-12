@@ -51,10 +51,14 @@ public class AuthController {
             return "redirect:/login";
         } else {
             final JwtResponse token = authService.login(authRequest);
-            Cookie cookie = new Cookie("tokens", token.toString());
+            Cookie cookie = new Cookie("access", token.getAccessToken());
             cookie.setMaxAge(3600);
             cookie.setHttpOnly(true);
+            Cookie cookie1 = new Cookie("refresh", token.getRefreshToken());
+            cookie1.setMaxAge(3600);
+            cookie1.setHttpOnly(true);
             response.addCookie(cookie);
+            response.addCookie(cookie1);
             return "redirect:/main";
         }
     }

@@ -4,16 +4,17 @@ import com.example.authorization.dtos.IdDto;
 import com.example.authorization.dtos.UserInfoDto;
 import com.example.authorization.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.io.IOException;
 
 @Controller
 @RequestMapping("api/user")
@@ -22,7 +23,7 @@ public class UserController  {
 
 
     private final UserService userService;
-    private final WebClient webClient = WebClient.create("http://localhost:8888");
+    private WebClient webClient = WebClient.create("http://localhost:8888");
 
 
     @PreAuthorize("hasAuthority('USER')")
@@ -36,6 +37,7 @@ public class UserController  {
                 .bodyToMono(UserInfoDto.class)
                 .block();
         model.addAttribute("user", userInfoDto);
+        model.addAttribute("id", userInfoDto.id);
         return "profile";
     }
     @PostMapping("/edit_profile")
@@ -62,6 +64,15 @@ public class UserController  {
                 .block();
         model.addAttribute("userInfoDto", userInfoDto);
         return "edit";
+    }
+    @GetMapping("/user_image/{name}")
+    @ResponseBody
+    public byte[] getUserImage(@PathVariable String name) throws IOException {
+        return webClient.get()
+                .uri("/server/user_image/" + name)
+                .retrieve()
+                .bodyToMono(ByteArrayResource.class)
+                .map(ByteArrayResource::getByteArray).block();
     }
 }
 
