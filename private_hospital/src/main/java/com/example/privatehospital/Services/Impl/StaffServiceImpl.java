@@ -1,10 +1,15 @@
 package com.example.privatehospital.Services.Impl;
 
+import static com.example.privatehospital.Entities.QStaff.staff;
 import com.example.privatehospital.Entities.Staff;
+import com.example.privatehospital.Repositories.QPredicates;
 import com.example.privatehospital.Repositories.StaffRepository;
 import com.example.privatehospital.Services.StaffService;
+import com.example.privatehospital.StaffFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -48,5 +53,13 @@ public class StaffServiceImpl implements StaffService {
             });
             return matchingFiles[0];
         }
+    }
+
+
+    @Override
+    public Page<Staff> getAllStaff(StaffFilter filter, Pageable pageable) {
+        var predicate = QPredicates.builder().add(filter.position(), staff.position::containsIgnoreCase)
+                                             .add(filter.department(), staff.department::containsIgnoreCase).build();
+        return staffRepository.findAll(predicate, pageable);
     }
 }

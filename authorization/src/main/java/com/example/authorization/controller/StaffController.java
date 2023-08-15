@@ -1,7 +1,6 @@
 package com.example.authorization.controller;
 
-import com.example.authorization.dtos.IdDto;
-import com.example.authorization.dtos.StaffDto;
+import com.example.authorization.dtos.*;
 import com.example.authorization.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
@@ -71,6 +70,19 @@ public class StaffController {
                 .retrieve()
                 .bodyToMono(ByteArrayResource.class)
                 .map(ByteArrayResource::getByteArray).block();
+    }
+    @GetMapping("/all")
+    public String getAllInfo(StaffFilterDto staffFilterDto, Model model) {
+        PageResponse pageResponse = webClient.post()
+                .uri("/server/staff/all/filter")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(staffFilterDto), StaffFilterDto.class)
+                .retrieve()
+                .bodyToMono(PageResponse.class)
+                .block();
+        model.addAttribute("staffFilterDto", staffFilterDto);
+        model.addAttribute("staff", pageResponse);
+        return "get_all_staff";
     }
 }
 

@@ -16,8 +16,8 @@ public class Staff {
     private String email;
     private String name;
     private String surname;
-    private String position;
-    private String department;
+    private String position="";
+    private String department="";
     @OneToMany(mappedBy = "staff")
     private List<ClientRecord> clientRecords;
 

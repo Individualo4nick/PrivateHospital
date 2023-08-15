@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All staff</title>
+</head>
+<body>
+<form action="/api/staff/all">
+    <label for="position">Position:
+        <input id="position" name="position" type="text" th:value="${staffFilterDto.position}">
+    </label>
+
+    <label for="department">Department:
+        <input id="department" name="department" type="text" th:value="${staffFilterDto.department}">
+    </label>
+    <label for="page">Page:
+        <input id="page" name="page" type="number" th:value="${staff.page}">
+    </label>
+    <label for="size">Size:
+        <input id="size" name="size" type="number" th:value="${staff.size}">
+    </label>
+    <input type="submit">Filter
+</form>
+
+<div th:each="oneStaff: ${staff.content}">
+    <p th:text="${oneStaff.id}">Staff</p>
+</div>
+</body>
+</html>

@@ -16,7 +16,7 @@ public class User {
     private String name;
     private String surname;
     @Column(name = "birth_date")
-    private String birthDate;
+    private String birthDate="";
     @OneToMany(mappedBy = "user")
     private List<Record> records;
 }
