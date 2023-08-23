@@ -1,6 +1,5 @@
 package com.example.authorization.controller;
 
-import com.example.authorization.dtos.IdDto;
 import com.example.authorization.dtos.UserInfoDto;
 import com.example.authorization.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -29,10 +27,8 @@ public class UserController  {
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/profile")
     public String profilePage(Model model){
-        IdDto idDto = new IdDto();
-        idDto.id = userService.getUserId();
         UserInfoDto userInfoDto = webClient.get()
-                .uri("/server/user/" + idDto.id.toString())
+                .uri("/server/user/" + userService.getUserId().toString())
                 .retrieve()
                 .bodyToMono(UserInfoDto.class)
                 .block();
@@ -55,10 +51,8 @@ public class UserController  {
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/edit_profile")
     public String getEditProfilePage(Model model, @ModelAttribute("userInfoDto") UserInfoDto userInfoDto){
-        IdDto idDto = new IdDto();
-        idDto.id = userService.getUserId();
         userInfoDto = webClient.get()
-                .uri("/server/user/" + idDto.id.toString())
+                .uri("/server/user/" + userService.getUserId().toString())
                 .retrieve()
                 .bodyToMono(UserInfoDto.class)
                 .block();

@@ -1,5 +1,7 @@
 package com.example.privatehospital.Services.Impl;
 
+import com.example.privatehospital.Entities.ClientRecord;
+import com.example.privatehospital.Entities.Record;
 import com.example.privatehospital.Entities.User;
 import com.example.privatehospital.Repositories.UserRepository;
 import com.example.privatehospital.Services.UserService;
@@ -9,6 +11,13 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -50,5 +59,17 @@ public class UserServiceImpl implements UserService {
             });
             return matchingFiles[0];
         }
+    }
+    public List<Record> getFutureRecords(List<Record> records) throws ParseException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = Calendar.getInstance().getTime();
+        ArrayList<Record> futureDates = new ArrayList<>();
+        for (Record record : records) {
+            Date currentDate = dateFormat.parse(record.getVisitDate());
+            if (currentDate.after(today)) {
+                futureDates.add(record);
+            }
+        }
+        return futureDates;
     }
 }

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:object="${staffDto}">
+<!--        <img width="200" height="200" th:src="@{/api/staff/staff_image/{name}(name=*{id})}" alt="">-->
+        <p th:text="*{'Email: ' + email}"></p>
+        <p th:text="*{'Name: ' + name}"></p>
+        <p th:text="*{'Surname: ' + surname}"></p>
+        <p th:text="*{'Position: ' + position}"></p>
+        <p th:text="*{'Department: ' + department}"></p>
+    </div>
+    <form th:action="@{/api/staff/{id}(id=${staffDto.id})}" method="post">
+        <label for="recordDate">
+            <input id="recordDate" name="recordDate" type="date" required>
+        </label>
+        <input type="submit" value="Make an appointment"/>
+    </form>
+</body>
+</html>

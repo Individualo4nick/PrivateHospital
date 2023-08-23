@@ -1,6 +1,10 @@
 package com.example.privatehospital.Services.Impl;
 
 import static com.example.privatehospital.Entities.QStaff.staff;
+
+import com.example.privatehospital.DTOs.RecordDto;
+import com.example.privatehospital.Entities.ClientRecord;
+import com.example.privatehospital.Entities.Record;
 import com.example.privatehospital.Entities.Staff;
 import com.example.privatehospital.Repositories.QPredicates;
 import com.example.privatehospital.Repositories.StaffRepository;
@@ -14,6 +18,13 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class StaffServiceImpl implements StaffService {
@@ -55,7 +66,18 @@ public class StaffServiceImpl implements StaffService {
         }
     }
 
-
+    public List<ClientRecord> getFutureRecords(List<ClientRecord> records) throws ParseException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = Calendar.getInstance().getTime();
+        ArrayList<ClientRecord> futureDates = new ArrayList<>();
+        for (ClientRecord clientRecord : records) {
+            Date currentDate = dateFormat.parse(clientRecord.getDate());
+            if (currentDate.after(today)) {
+                futureDates.add(clientRecord);
+            }
+        }
+        return futureDates;
+    }
     @Override
     public Page<Staff> getAllStaff(StaffFilter filter, Pageable pageable) {
         var predicate = QPredicates.builder().add(filter.position(), staff.position::containsIgnoreCase)

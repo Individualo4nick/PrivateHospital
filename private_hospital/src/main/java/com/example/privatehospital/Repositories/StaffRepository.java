@@ -13,8 +13,4 @@ import java.util.List;
 public interface StaffRepository extends JpaRepository<Staff, Long>, QuerydslPredicateExecutor<Staff> {
     Staff getByName(String name);
     Staff getStaffById(Long id);
-    @Query(value= "SELECT DISTINCT c.position FROM Staff c")
-    List<String> getPositions();
-    @Query(value= "SELECT DISTINCT c.department FROM Staff c")
-    List<String> getDepartments();
 }

@@ -13,6 +13,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 @Controller
 @RequestMapping("api/staff")
@@ -25,16 +31,14 @@ public class StaffController {
 
     @PreAuthorize("hasAuthority('STAFF')")
     @GetMapping("/profile")
-    public String profilePage(Model model){
-        IdDto idDto = new IdDto();
-        idDto.id = userService.getUserId();
+    public String profilePage(Model model) throws ParseException {
         StaffDto staffDto = webClient.get()
-                .uri("/server/staff/" + idDto.id.toString())
+                .uri("/server/staff/" + userService.getUserId().toString())
                 .retrieve()
                 .bodyToMono(StaffDto.class)
                 .block();
         model.addAttribute("staff", staffDto);
-        model.addAttribute("id", staffDto.id);
+        model.addAttribute("id", userService.getUserId());
         return "staff_profile";
     }
     @PostMapping("/edit_profile")
@@ -52,10 +56,8 @@ public class StaffController {
     @PreAuthorize("hasAuthority('STAFF')")
     @GetMapping("/edit_profile")
     public String getEditProfilePage(Model model, @ModelAttribute("staffDto") StaffDto staffDto){
-        IdDto idDto = new IdDto();
-        idDto.id = userService.getUserId();
         staffDto = webClient.get()
-                .uri("/server/staff/" + idDto.id.toString())
+                .uri("/server/staff/" + userService.getUserId().toString())
                 .retrieve()
                 .bodyToMono(StaffDto.class)
                 .block();
@@ -64,7 +66,7 @@ public class StaffController {
     }
     @GetMapping("/staff_image/{name}")
     @ResponseBody
-    public byte[] getUserImage(@PathVariable String name) throws IOException {
+    public byte[] getUserImage  (@PathVariable String name) throws IOException {
         return webClient.get()
                 .uri("/server/staff_image/" + name)
                 .retrieve()
@@ -72,7 +74,7 @@ public class StaffController {
                 .map(ByteArrayResource::getByteArray).block();
     }
     @GetMapping("/all")
-    public String getAllInfo(StaffFilterDto staffFilterDto, Model model) {
+    public String getAllInfoAllStaff(StaffFilterDto staffFilterDto, Model model) {
         PageResponse pageResponse = webClient.post()
                 .uri("/server/staff/all/filter")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -83,6 +85,30 @@ public class StaffController {
         model.addAttribute("staffFilterDto", staffFilterDto);
         model.addAttribute("staff", pageResponse);
         return "get_all_staff";
+    }
+    @GetMapping("/{id}")
+    public String getAllInfoOneStaff(@PathVariable String id, Model model) {
+        StaffDto staffDto = webClient.get()
+                .uri("/server/staff/"+id)
+                .retrieve()
+                .bodyToMono(StaffDto.class)
+                .block();
+        model.addAttribute("staffDto", staffDto);
+        return "staff_profile_for_user";
+    }
+    @PostMapping("/{id}")
+    public String makeAppointment(@PathVariable String id, String recordDate) {
+        IdDto idDto = new IdDto();
+        idDto.id = userService.getUserId();
+        idDto.smth_needed = recordDate;
+        webClient.post()
+                .uri("/server/staff/"+id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(idDto), IdDto.class)
+                .retrieve()
+                .bodyToMono(Integer.class)
+                .block();
+        return "redirect:/main";
     }
 }
 

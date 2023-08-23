@@ -1,10 +1,12 @@
-package com.example.authorization.dtos;
+package com.example.privatehospital.DTOs;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter
 @Setter
+@Accessors(chain = true)
 public class RecordDto {
     public Long id;
     public String visitDate;

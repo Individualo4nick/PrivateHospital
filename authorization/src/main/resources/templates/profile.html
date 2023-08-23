@@ -12,9 +12,17 @@
     <p th:text="*{'Name: ' + name}"></p>
     <p th:text="*{'Surname: ' + surname}"></p>
     <p th:text="*{'Birth date: ' + birthDate}"></p>
-    <p>Your records: </p>
+    <p>Your upcoming records: </p>
     <div th:each="record: *{records}">
-        <p th:text="record.visitDate"></p>
+        <p th:text="'Record № ' + ${record.id}"></p>
+        <p th:text="${record.staff_name} + ' ' + ${record.staff_surname}"></p>
+        <p th:text="${record.staff_position}"></p>
+        <p th:text="${record.staff_department}"></p>
+        <p th:text="${record.service}"></p>
+        <p th:text="${record.description}"></p>
+        <p th:text="${record.visitDate}"></p>
+        <p th:text="${record.price + ' &#8381'}"></p>
+        <br>
     </div>
 </div>
 <a href="/api/user/edit_profile">Edit</a>
