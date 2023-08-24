@@ -61,12 +61,21 @@ public class UserController  {
     }
     @GetMapping("/user_image/{name}")
     @ResponseBody
-    public byte[] getUserImage(@PathVariable String name) throws IOException {
+    public byte[] getUserImage(@PathVariable String name) {
         return webClient.get()
-                .uri("/server/user_image/" + name)
+                .uri("/server/user/image/" + name)
                 .retrieve()
                 .bodyToMono(ByteArrayResource.class)
                 .map(ByteArrayResource::getByteArray).block();
     }
+    @GetMapping("/profile/medical_card")
+    public String getMedicalCard(Model model){
+        UserInfoDto userInfoDto = webClient.get()
+                .uri("/server/user/medical_card/" + userService.getUserId().toString())
+                .retrieve()
+                .bodyToMono(UserInfoDto.class)
+                .block();
+        model.addAttribute("user", userInfoDto);
+        return "medical_card";
+    }
 }
-

@@ -21,16 +21,11 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/server")
+@RequestMapping("/server/staff")
 public class StaffController {
     private final StaffService staffService;
     private final UserService userService;
@@ -41,30 +36,30 @@ public class StaffController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/staff/registration")
+    @PostMapping(value = "/registration")
     public Integer saveStaff(@RequestBody IdDto idDto){
         staffService.saveStaffById(idDto.id);
         return Response.SC_OK;
     }
 
-    @GetMapping(value = "/staff/{id}")
+    @GetMapping(value = "/{id}")
     public StaffDto getStaffInfo(@PathVariable Long id) throws ParseException {
         Staff staff = staffService.getStaffInfo(id);
         staff.setClientRecords(staffService.getFutureRecords(staff.getClientRecords()));
         return staffMapper.staffToStaffDto(staff);
     }
-    @PutMapping(value = "/staff")
+    @PutMapping
     public Integer updateStaff(@RequestBody Staff staff){
         staffService.saveStaff(staff);
         return Response.SC_OK;
     }
-    @GetMapping("/staff_image/{name}")
+    @GetMapping("/image/{name}")
     public byte[] getStaffImage(@PathVariable String name) throws IOException {
         File serverFile = staffService.getStaffImage(name);
         return Files.readAllBytes(serverFile.toPath());
     }
 
-    @PostMapping("/staff/all/filter")
+    @PostMapping("/all/filter")
     public PageResponse getAllStaff(@RequestBody StaffFilterDto staffFilterDto) {
         StaffFilter filter = new StaffFilter(staffFilterDto.position, staffFilterDto.department);
         Page<Staff> page;
@@ -78,7 +73,7 @@ public class StaffController {
             page = staffService.getAllStaff(filter, PageRequest.of(0, 20));
         return new PageResponse().setContent(staffMapper.arrayStaffToArrayStaffDto(page.getContent())).setPage(page.getNumber()).setSize(page.getSize());
     }
-    @PostMapping(value = "/staff/{id}")
+    @PostMapping(value = "/{id}")
     public Integer addRecord(@PathVariable Long id, @RequestBody IdDto idDto){
         ClientRecord clientRecord = new ClientRecord().setDate(idDto.smth_needed).setUser(userService.getUserInfo(idDto.id));
         Staff staff = staffService.getStaffInfo(id);

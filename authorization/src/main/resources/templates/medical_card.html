@@ -2,17 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Profile</title>
+    <title>Medical card</title>
 </head>
 <body>
-<label>Your profile: </label>
 <div th:object="${user}">
-    <img width="200" height="200" th:src="${'/api/user/user_image/' + id}">
-    <p th:text="*{'Email: ' + email}"></p>
-    <p th:text="*{'Name: ' + name}"></p>
-    <p th:text="*{'Surname: ' + surname}"></p>
-    <p th:text="*{'Birth date: ' + birthDate}"></p>
-    <p>Your upcoming records: </p>
+    <p>Your medical card: </p>
     <div th:each="record: *{records}">
         <p th:text="'Record № ' + ${record.id}"></p>
         <p th:text="${record.staff_name} + ' ' + ${record.staff_surname}"></p>
@@ -25,7 +19,5 @@
         <br>
     </div>
 </div>
-<a href="/api/user/edit_profile">Edit</a>
-<a href="/api/user/profile/medical_card">Medical card</a>
 </body>
 </html>
