@@ -1,11 +1,11 @@
 package com.example.privatehospital.Services.Impl;
 
-import com.example.privatehospital.Entities.ClientRecord;
+import com.example.privatehospital.Entities.Comment;
 import com.example.privatehospital.Entities.Record;
 import com.example.privatehospital.Entities.User;
+import com.example.privatehospital.Repositories.CommentRepository;
 import com.example.privatehospital.Repositories.UserRepository;
 import com.example.privatehospital.Services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +21,12 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
+    public UserServiceImpl(UserRepository userRepository, CommentRepository commentRepository) {
+        this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
+    }
 
     @Value("${files.path}")
     private String imagePath;
@@ -71,5 +75,8 @@ public class UserServiceImpl implements UserService {
             }
         }
         return futureDates;
+    }
+    public void addComment(Comment comment){
+        commentRepository.save(comment);
     }
 }

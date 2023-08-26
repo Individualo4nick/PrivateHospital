@@ -25,7 +25,7 @@
 <div style="display: flex" id="staff">
     <div th:each="oneStaff: ${staff.content}" style="width: 150px; margin: 5px">
         <a style="text-decoration: none" th:href="${'/api/staff/' + oneStaff.id}">
-            <img width="150" height="150" th:src="${'/api/staff/staff_image/' + oneStaff.id}">
+            <img width="150" height="150" th:src="${'/api/staff/image/' + oneStaff.id}">
             <p th:text="${oneStaff.name} + ' ' + ${oneStaff.surname}"></p>
             <p th:text="${oneStaff.position}"></p>
             <p th:text="${oneStaff.department}"></p>

@@ -2,6 +2,7 @@ package com.example.privatehospital.Controller;
 
 import com.example.privatehospital.DTOs.IdDto;
 import com.example.privatehospital.DTOs.UserDto;
+import com.example.privatehospital.Entities.Comment;
 import com.example.privatehospital.Entities.User;
 import com.example.privatehospital.Mappers.UserMapper;
 import com.example.privatehospital.Services.UserService;
@@ -47,6 +48,7 @@ public class UserController {
     }
     @GetMapping("/image/{name}")
     public byte[] getUserImage(@PathVariable String name) throws IOException {
+        System.out.println(1);
         File serverFile = userService.getUserImage(name);
         return Files.readAllBytes(serverFile.toPath());
     }
@@ -54,5 +56,12 @@ public class UserController {
     public UserDto getMedicalCard(@PathVariable Long id){
         User user = userService.getUserInfo(id);
         return userMapper.userToUserDto(user);
+    }
+    @PostMapping("/add_comment/{id}")
+    public Integer addComment(@PathVariable Long id, @RequestBody Comment comment){
+        User user = userService.getUserInfo(id);
+        comment.setUsername(user.getName());
+        userService.addComment(comment);
+        return Response.SC_OK;
     }
 }

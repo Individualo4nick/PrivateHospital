@@ -1,5 +1,6 @@
 package com.example.authorization.controller;
 
+import com.example.authorization.dtos.CommentDto;
 import com.example.authorization.dtos.UserInfoDto;
 import com.example.authorization.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.io.IOException;
 
 @Controller
 @RequestMapping("api/user")
@@ -59,11 +59,12 @@ public class UserController  {
         model.addAttribute("userInfoDto", userInfoDto);
         return "edit";
     }
-    @GetMapping("/user_image/{name}")
+    @GetMapping("/image/{name}")
     @ResponseBody
     public byte[] getUserImage(@PathVariable String name) {
+        System.out.println(name);
         return webClient.get()
-                .uri("/server/user/image/" + name)
+                .uri("/server/user/image/"+name)
                 .retrieve()
                 .bodyToMono(ByteArrayResource.class)
                 .map(ByteArrayResource::getByteArray).block();
@@ -77,5 +78,19 @@ public class UserController  {
                 .block();
         model.addAttribute("user", userInfoDto);
         return "medical_card";
+    }
+    @PostMapping("/send_comment")
+    public String sendComment(Long staffId, String some_comment){
+        CommentDto comment = new CommentDto().setStaffId(staffId).setText(some_comment);
+        Long id = userService.getUserId();
+        comment.setUserId(id);
+        Integer a = webClient.post()
+                .uri("/server/user/add_comment/"+id.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(comment), CommentDto.class)
+                .retrieve()
+                .bodyToMono(Integer.class)
+                .block();
+        return "redirect:/api/staff/"+staffId.toString();
     }
 }

@@ -2,10 +2,10 @@ package com.example.privatehospital.Services.Impl;
 
 import static com.example.privatehospital.Entities.QStaff.staff;
 
-import com.example.privatehospital.DTOs.RecordDto;
 import com.example.privatehospital.Entities.ClientRecord;
-import com.example.privatehospital.Entities.Record;
+import com.example.privatehospital.Entities.Comment;
 import com.example.privatehospital.Entities.Staff;
+import com.example.privatehospital.Repositories.CommentRepository;
 import com.example.privatehospital.Repositories.QPredicates;
 import com.example.privatehospital.Repositories.StaffRepository;
 import com.example.privatehospital.Services.StaffService;
@@ -28,10 +28,17 @@ import java.util.List;
 
 @Service
 public class StaffServiceImpl implements StaffService {
-    @Autowired
-    private StaffRepository staffRepository;
+    private final StaffRepository staffRepository;
+    private final CommentRepository commentRepository;
     @Value("${files.path}")
     private String imagePath;
+
+    @Autowired
+    public StaffServiceImpl(StaffRepository staffRepository, CommentRepository commentRepository) {
+        this.staffRepository = staffRepository;
+        this.commentRepository = commentRepository;
+    }
+
     public void saveStaffById(Long id){
         Staff staff = new Staff();
         staff.setId(id);
@@ -83,5 +90,9 @@ public class StaffServiceImpl implements StaffService {
         var predicate = QPredicates.builder().add(filter.position(), staff.position::containsIgnoreCase)
                                              .add(filter.department(), staff.department::containsIgnoreCase).build();
         return staffRepository.findAll(predicate, pageable);
+    }
+    @Override
+    public List<Comment> getAllComment(Long staffId) {
+        return commentRepository.findAllByStaffId(staffId);
     }
 }

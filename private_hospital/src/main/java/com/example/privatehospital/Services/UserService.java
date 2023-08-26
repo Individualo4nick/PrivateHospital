@@ -1,5 +1,6 @@
 package com.example.privatehospital.Services;
 
+import com.example.privatehospital.Entities.Comment;
 import com.example.privatehospital.Entities.Record;
 import com.example.privatehospital.Entities.Staff;
 import com.example.privatehospital.Entities.User;
@@ -15,4 +16,5 @@ public interface UserService{
     void saveUser(User user);
     File getUserImage(String userTitle);
     List<Record> getFutureRecords(List<Record> records) throws ParseException;
+    void addComment(Comment comment);
 }

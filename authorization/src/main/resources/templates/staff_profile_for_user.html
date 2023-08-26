@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Profile</title>
 </head>
 <body>
     <div th:object="${staffDto}">
-<!--        <img width="200" height="200" th:src="@{/api/staff/staff_image/{name}(name=*{id})}" alt="">-->
+        <img width="200" height="200" th:src="${'/api/staff/image/' + id}" alt="">
         <p th:text="*{'Email: ' + email}"></p>
         <p th:text="*{'Name: ' + name}"></p>
         <p th:text="*{'Surname: ' + surname}"></p>
@@ -19,5 +20,38 @@
         </label>
         <input type="submit" value="Make an appointment"/>
     </form>
+
+    <h4 sec:authorize="hasAuthority('USER')">Write a comment</h4>
+    <div sec:authorize="hasAuthority('USER')">
+        <form th:action="@{/api/user/send_comment}" id="send_comment" method="post">
+            <label for="staffId">
+                <input hidden name="staffId" id="staffId" type="number" th:value="${staffDto.id}">
+            </label>
+            <label for="some_comment">
+                <textarea id="some_comment" name="some_comment" cols="50" rows="7"></textarea><br>
+            </label>
+            <input type="submit" value="Send">
+        </form>
+    </div>
+    <h4>All comments</h4>
+    <div>
+        <div th:each="comment: ${comments}" style="display: flex">
+            <p th:value="${comment.userId}"></p>
+            <div style="display: flex">
+                <img width="30" height="30" th:src="${'/api/user/image/' + comment.userId}" alt="">
+                <p th:text="${comment.username}" style="margin-right: 5px"></p>
+            </div>
+            <p th:text="${comment.text}"></p>
+            <form th:action="@{/api/admin/{id}(id=${comment.id})}" method="post" sec:authorize="hasAuthority('ADMIN')">
+                <label for="idComment">
+                    <input th:value="${comment.id}" name="idComment" id="idComment" hidden>
+                </label>
+                <label for="idStaff">
+                    <input th:value="${comment.staffId}" name="idStaff" id="idStaff" hidden>
+                </label>
+                <input type="submit" value="Delete" style="display: flex; margin-bottom: 50px">
+            </form>
+        </div>
+    </div>
 </body>
 </html>

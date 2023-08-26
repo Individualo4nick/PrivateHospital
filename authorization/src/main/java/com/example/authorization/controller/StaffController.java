@@ -12,13 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("api/staff")
@@ -64,11 +59,11 @@ public class StaffController {
         model.addAttribute("staffDto", staffDto);
         return "staff_edit";
     }
-    @GetMapping("/staff_image/{name}")
+    @GetMapping("/image/{name}")
     @ResponseBody
-    public byte[] getUserImage  (@PathVariable String name) throws IOException {
+    public byte[] getUserImage (@PathVariable String name){
         return webClient.get()
-                .uri("/server/staff_image/" + name)
+                .uri("/server/staff/image/" + name)
                 .retrieve()
                 .bodyToMono(ByteArrayResource.class)
                 .map(ByteArrayResource::getByteArray).block();
@@ -93,7 +88,14 @@ public class StaffController {
                 .retrieve()
                 .bodyToMono(StaffDto.class)
                 .block();
+        List<CommentDto> commentDtoList = webClient.get()
+                        .uri("/server/staff/comment/"+id)
+                        .retrieve()
+                        .bodyToFlux(CommentDto.class)
+                        .collectList()
+                        .block();
         model.addAttribute("staffDto", staffDto);
+        model.addAttribute("comments", commentDtoList);
         return "staff_profile_for_user";
     }
     @PostMapping("/{id}")
@@ -108,6 +110,6 @@ public class StaffController {
                 .retrieve()
                 .bodyToMono(Integer.class)
                 .block();
-        return "redirect:/main";
+        return "redirect:/api/staff/"+id;
     }
 }

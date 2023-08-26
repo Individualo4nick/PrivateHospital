@@ -7,7 +7,7 @@
 <body>
 <label>Your profile: </label>
 <div th:object="${user}">
-    <img width="200" height="200" th:src="${'/api/user/user_image/' + id}">
+    <img width="200" height="200" th:src="${'/api/user/image/' + id}">
     <p th:text="*{'Email: ' + email}"></p>
     <p th:text="*{'Name: ' + name}"></p>
     <p th:text="*{'Surname: ' + surname}"></p>

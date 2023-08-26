@@ -4,10 +4,8 @@ import com.example.privatehospital.DTOs.IdDto;
 import com.example.privatehospital.DTOs.StaffDto;
 import com.example.privatehospital.DTOs.StaffFilterDto;
 import com.example.privatehospital.DTOs.PageResponse;
-import com.example.privatehospital.Entities.ClientRecord;
+import com.example.privatehospital.Entities.*;
 import com.example.privatehospital.Entities.Record;
-import com.example.privatehospital.Entities.Staff;
-import com.example.privatehospital.Entities.User;
 import com.example.privatehospital.Mappers.StaffMapper;
 import com.example.privatehospital.Services.StaffService;
 import com.example.privatehospital.Services.UserService;
@@ -88,5 +86,9 @@ public class StaffController {
         user.setRecords(records);
         userService.saveUser(user);
         return Response.SC_OK;
+    }
+    @GetMapping("/comment/{id}")
+    public List<Comment> getAllComments(@PathVariable Long id){
+        return staffService.getAllComment(id);
     }
 }
