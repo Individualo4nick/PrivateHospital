@@ -6,8 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ClientRecordDto {
-    public long id;
+    public Long id;
     public String date;
+    public Long user_id;
     public String user_name;
     public String user_surname;
 }

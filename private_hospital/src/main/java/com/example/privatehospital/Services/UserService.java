@@ -1,5 +1,6 @@
 package com.example.privatehospital.Services;
 
+import com.example.privatehospital.DTOs.RecordDto;
 import com.example.privatehospital.Entities.Comment;
 import com.example.privatehospital.Entities.Record;
 import com.example.privatehospital.Entities.Staff;
@@ -17,4 +18,6 @@ public interface UserService{
     File getUserImage(String userTitle);
     List<Record> getFutureRecords(List<Record> records) throws ParseException;
     void addComment(Comment comment);
+    Record getRecordByClientRecordId(Long id);
+    void updateRecord(RecordDto recordDto);
 }

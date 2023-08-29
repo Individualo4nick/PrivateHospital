@@ -1,6 +1,7 @@
 package com.example.authorization.controller;
 
 import com.example.authorization.dtos.CommentDto;
+import com.example.authorization.dtos.RecordDto;
 import com.example.authorization.dtos.UserInfoDto;
 import com.example.authorization.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class UserController  {
 
 
     private final UserService userService;
-    private WebClient webClient = WebClient.create("http://localhost:8888");
+    private final WebClient webClient = WebClient.create("http://localhost:8888");
 
 
     @PreAuthorize("hasAuthority('USER')")
@@ -36,6 +37,17 @@ public class UserController  {
         model.addAttribute("id", userInfoDto.id);
         return "profile";
     }
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/edit_profile")
+    public String getEditProfilePage(Model model, @ModelAttribute("userInfoDto") UserInfoDto userInfoDto){
+        userInfoDto = webClient.get()
+                .uri("/server/user/" + userService.getUserId().toString())
+                .retrieve()
+                .bodyToMono(UserInfoDto.class)
+                .block();
+        model.addAttribute("userInfoDto", userInfoDto);
+        return "edit";
+    }
     @PostMapping("/edit_profile")
     public String editProfilePage(UserInfoDto userInfoDto){
         userInfoDto.id = userService.getUserId();
@@ -47,17 +59,6 @@ public class UserController  {
                 .bodyToMono(Integer.class)
                 .block();
         return "redirect:/api/user/profile";
-    }
-    @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/edit_profile")
-    public String getEditProfilePage(Model model, @ModelAttribute("userInfoDto") UserInfoDto userInfoDto){
-        userInfoDto = webClient.get()
-                .uri("/server/user/" + userService.getUserId().toString())
-                .retrieve()
-                .bodyToMono(UserInfoDto.class)
-                .block();
-        model.addAttribute("userInfoDto", userInfoDto);
-        return "edit";
     }
     @GetMapping("/image/{name}")
     @ResponseBody
@@ -92,5 +93,27 @@ public class UserController  {
                 .bodyToMono(Integer.class)
                 .block();
         return "redirect:/api/staff/"+staffId.toString();
+    }
+    @GetMapping("/edit_record/{id}")
+    public String getEditRecordPage(@PathVariable Long id, Model model){
+        RecordDto recordDto = webClient.get()
+                .uri("/server/user/record/" + id.toString())
+                .retrieve()
+                .bodyToMono(RecordDto.class)
+                .block();
+        model.addAttribute("recordDto", recordDto);
+        return "edit_client_record";
+    }
+    @PostMapping("/edit_record/{id}")
+    public String editRecord(@PathVariable Long id, RecordDto recordDto){
+        recordDto.setClient_record_id(id);
+        Integer a = webClient.post()
+                .uri("/server/user/record/" + id.toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(recordDto), RecordDto.class)
+                .retrieve()
+                .bodyToMono(Integer.class)
+                .block();
+        return "redirect:/api/staff/profile";
     }
 }

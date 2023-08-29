@@ -18,6 +18,9 @@
         <label for="recordDate">
             <input id="recordDate" name="recordDate" type="date" required>
         </label>
+        <label>
+
+        </label>
         <input type="submit" value="Make an appointment"/>
     </form>
 
@@ -39,7 +42,7 @@
             <p th:value="${comment.userId}"></p>
             <div style="display: flex">
                 <img width="30" height="30" th:src="${'/api/user/image/' + comment.userId}" alt="">
-                <p th:text="${comment.username}" style="margin-right: 5px"></p>
+                <p th:text="${comment.username}" style="margin-right: 5px; background: aqua"></p>
             </div>
             <p th:text="${comment.text}"></p>
             <form th:action="@{/api/admin/{id}(id=${comment.id})}" method="post" sec:authorize="hasAuthority('ADMIN')">

@@ -15,4 +15,5 @@ public class RecordDto {
     public String staff_surname;
     public String staff_position;
     public String staff_department;
+    public Long client_record_id;
 }

@@ -1,9 +1,11 @@
 package com.example.privatehospital.Services.Impl;
 
+import com.example.privatehospital.DTOs.RecordDto;
 import com.example.privatehospital.Entities.Comment;
 import com.example.privatehospital.Entities.Record;
 import com.example.privatehospital.Entities.User;
 import com.example.privatehospital.Repositories.CommentRepository;
+import com.example.privatehospital.Repositories.RecordRepository;
 import com.example.privatehospital.Repositories.UserRepository;
 import com.example.privatehospital.Services.UserService;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,9 +25,11 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
-    public UserServiceImpl(UserRepository userRepository, CommentRepository commentRepository) {
+    private final RecordRepository recordRepository;
+    public UserServiceImpl(UserRepository userRepository, CommentRepository commentRepository, RecordRepository recordRepository) {
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
+        this.recordRepository = recordRepository;
     }
 
     @Value("${files.path}")
@@ -78,5 +82,11 @@ public class UserServiceImpl implements UserService {
     }
     public void addComment(Comment comment){
         commentRepository.save(comment);
+    }
+    public Record getRecordByClientRecordId(Long clientRecordId){
+        return recordRepository.getRecordByClientRecordId(clientRecordId);
+    }
+    public void updateRecord(RecordDto recordDto){
+        recordRepository.updateRecordsField(recordDto.client_record_id, recordDto.description, recordDto.service, recordDto.price);
     }
 }

@@ -6,7 +6,7 @@
 </head>
 <body>
 <div th:object="${staff}">
-    <img width="200" height="200" th:src="${'/api/staff/image/' + id}">
+    <img width="200" height="200" th:src="${'/api/staff/image/' + id}" alt="">
     <p th:text="*{'Email: ' + email}"></p>
     <p th:text="*{'Name: ' + name}"></p>
     <p th:text="*{'Surname: ' + surname}"></p>
@@ -14,7 +14,7 @@
     <p th:text="*{'Department: ' + department}"></p>
     <p>Your upcoming records: </p>
     <div th:each="record: *{records}">
-        <p th:text="'Record № ' + ${record.id}"></p>
+        <a th:href="${'/api/user/edit_record/' + record.id}" th:text="'Record № ' + ${record.id}"></a>
         <p th:text="${record.date}"></p>
         <p th:text="${record.user_name}"></p>
         <p th:text="${record.user_surname}"></p>

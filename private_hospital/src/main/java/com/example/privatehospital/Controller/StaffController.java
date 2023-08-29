@@ -78,8 +78,8 @@ public class StaffController {
         List<ClientRecord> clientRecords = staff.getClientRecords();
         clientRecords.add(clientRecord);
         staff.setClientRecords(clientRecords);
-        staffService.saveStaff(staff);
-        Record record = new Record().setVisitDate(idDto.smth_needed).setStaff(staff);
+        Staff staff1 = staffService.saveStaff(staff);
+        Record record = new Record().setVisitDate(idDto.smth_needed).setStaff(staff).setClientRecordId(staff1.getClientRecords().get(staff1.getClientRecords().size() - 1).getId());
         User user = userService.getUserInfo(idDto.id);
         List<Record> records = user.getRecords();
         records.add(record);

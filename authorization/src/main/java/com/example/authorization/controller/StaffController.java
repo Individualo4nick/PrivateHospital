@@ -21,7 +21,7 @@ import java.util.List;
 public class StaffController {
 
     private final UserService userService;
-    private WebClient webClient = WebClient.create("http://localhost:8888");
+    private final WebClient webClient = WebClient.create("http://localhost:8888");
 
 
     @PreAuthorize("hasAuthority('STAFF')")

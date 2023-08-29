@@ -1,9 +1,12 @@
 package com.example.privatehospital.Controller;
 
 import com.example.privatehospital.DTOs.IdDto;
+import com.example.privatehospital.DTOs.RecordDto;
 import com.example.privatehospital.DTOs.UserDto;
 import com.example.privatehospital.Entities.Comment;
+import com.example.privatehospital.Entities.Record;
 import com.example.privatehospital.Entities.User;
+import com.example.privatehospital.Mappers.RecordMapper;
 import com.example.privatehospital.Mappers.UserMapper;
 import com.example.privatehospital.Services.UserService;
 
@@ -24,6 +27,7 @@ public class UserController {
     private String imagePath;
     private final UserService userService;
     private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+    private final RecordMapper recordMapper = Mappers.getMapper(RecordMapper.class);
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -48,7 +52,6 @@ public class UserController {
     }
     @GetMapping("/image/{name}")
     public byte[] getUserImage(@PathVariable String name) throws IOException {
-        System.out.println(1);
         File serverFile = userService.getUserImage(name);
         return Files.readAllBytes(serverFile.toPath());
     }
@@ -62,6 +65,15 @@ public class UserController {
         User user = userService.getUserInfo(id);
         comment.setUsername(user.getName());
         userService.addComment(comment);
+        return Response.SC_OK;
+    }
+    @GetMapping("/record/{id}")
+    public RecordDto getRecord(@PathVariable Long id){
+        return recordMapper.recordToRecordDto(userService.getRecordByClientRecordId(id));
+    }
+    @PostMapping("/record/{id}")
+    public Integer updateRecord(@RequestBody RecordDto recordDto){
+        userService.updateRecord(recordDto);
         return Response.SC_OK;
     }
 }

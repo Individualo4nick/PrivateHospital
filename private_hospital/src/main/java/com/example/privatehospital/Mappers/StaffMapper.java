@@ -22,6 +22,7 @@ public interface StaffMapper {
                 clientRecordDtos.add(new ClientRecordDto()
                         .setId(clientRecord.getId())
                         .setDate(clientRecord.getDate())
+                        .setUser_id(clientRecord.getUser().getId())
                         .setUser_name(clientRecord.getUser().getName())
                         .setUser_surname(clientRecord.getUser().getSurname()));
             }

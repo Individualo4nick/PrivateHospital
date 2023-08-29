@@ -50,8 +50,8 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public void saveStaff(Staff staff) {
-        staffRepository.save(staff);
+    public Staff saveStaff(Staff staff) {
+        return staffRepository.save(staff);
     }
     @Override
     public File getStaffImage(String userName) {

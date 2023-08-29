@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit</title>
+</head>
+<body>
+<form th:action="@{/api/user/edit_record/{id}(id=${recordDto.client_record_id})}" method="post" th:object="${recordDto}">
+    <label for="description">Description
+        <input type="text" name="description" id="description" th:value="*{description}">
+    </label>
+
+    <label for="service">Service
+        <input type="text" name="service" id="service" th:value="*{service}">
+    </label>
+
+    <label for="price">Price
+        <input type="text" name="price" id="price" th:value="*{price}">
+    </label>
+
+    <input type="submit" value="Edit"/>
+</form>
+</body>
+</html>
