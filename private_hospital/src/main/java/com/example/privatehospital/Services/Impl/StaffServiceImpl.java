@@ -95,4 +95,10 @@ public class StaffServiceImpl implements StaffService {
     public List<Comment> getAllComment(Long staffId) {
         return commentRepository.findAllByStaffId(staffId);
     }
+    public void deleteStaffById(Long id){
+        staffRepository.deleteById(id);
+    }
+    public void deleteCommentById(Long id){
+        commentRepository.deleteById(id);
+    }
 }

@@ -63,7 +63,6 @@ public class UserController  {
     @GetMapping("/image/{name}")
     @ResponseBody
     public byte[] getUserImage(@PathVariable String name) {
-        System.out.println(name);
         return webClient.get()
                 .uri("/server/user/image/"+name)
                 .retrieve()
@@ -107,7 +106,7 @@ public class UserController  {
     @PostMapping("/edit_record/{id}")
     public String editRecord(@PathVariable Long id, RecordDto recordDto){
         recordDto.setClient_record_id(id);
-        Integer a = webClient.post()
+        Integer a = webClient.put()
                 .uri("/server/user/record/" + id.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(recordDto), RecordDto.class)

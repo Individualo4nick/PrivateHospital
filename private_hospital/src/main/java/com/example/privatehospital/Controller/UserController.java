@@ -71,7 +71,7 @@ public class UserController {
     public RecordDto getRecord(@PathVariable Long id){
         return recordMapper.recordToRecordDto(userService.getRecordByClientRecordId(id));
     }
-    @PostMapping("/record/{id}")
+    @PutMapping("/record/{id}")
     public Integer updateRecord(@RequestBody RecordDto recordDto){
         userService.updateRecord(recordDto);
         return Response.SC_OK;

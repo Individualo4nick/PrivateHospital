@@ -45,10 +45,7 @@
                 <p th:text="${comment.username}" style="margin-right: 5px; background: aqua"></p>
             </div>
             <p th:text="${comment.text}"></p>
-            <form th:action="@{/api/admin/{id}(id=${comment.id})}" method="post" sec:authorize="hasAuthority('ADMIN')">
-                <label for="idComment">
-                    <input th:value="${comment.id}" name="idComment" id="idComment" hidden>
-                </label>
+            <form th:action="@{/api/admin/delete_comment/{id}(id=${comment.id})}" method="post" sec:authorize="hasAuthority('ADMIN')">
                 <label for="idStaff">
                     <input th:value="${comment.staffId}" name="idStaff" id="idStaff" hidden>
                 </label>

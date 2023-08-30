@@ -19,4 +19,6 @@ public interface StaffService {
     Page<Staff> getAllStaff(StaffFilter filter, Pageable pageable);
     List<ClientRecord> getFutureRecords(List<ClientRecord> records) throws ParseException;
     List<Comment> getAllComment(Long staffId);
+    void deleteStaffById(Long id);
+    void deleteCommentById(Long id);
 }

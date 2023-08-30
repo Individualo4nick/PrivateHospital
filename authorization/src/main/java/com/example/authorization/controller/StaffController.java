@@ -26,7 +26,7 @@ public class StaffController {
 
     @PreAuthorize("hasAuthority('STAFF')")
     @GetMapping("/profile")
-    public String profilePage(Model model) throws ParseException {
+    public String profilePage(Model model){
         StaffDto staffDto = webClient.get()
                 .uri("/server/staff/" + userService.getUserId().toString())
                 .retrieve()
