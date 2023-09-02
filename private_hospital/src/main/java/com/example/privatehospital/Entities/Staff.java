@@ -20,8 +20,7 @@ public class Staff {
     private String surname;
     private String position="";
     private String department="";
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "staff_id")
-    private List<ClientRecord> clientRecords;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "staff", fetch = FetchType.EAGER)
+    private List<Record> records;
 
 }

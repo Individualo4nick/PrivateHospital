@@ -43,12 +43,12 @@ public class StaffController {
     @GetMapping(value = "/{id}")
     public StaffDto getStaffInfo(@PathVariable Long id) throws ParseException {
         Staff staff = staffService.getStaffInfo(id);
-        staff.setClientRecords(staffService.getFutureRecords(staff.getClientRecords()));
+        staff.setRecords(staffService.getFutureRecords(staff.getRecords()));
         return staffMapper.staffToStaffDto(staff);
     }
     @PutMapping
     public Integer updateStaff(@RequestBody Staff staff){
-        staffService.saveStaff(staff);
+        staffService.saveStaff(staff.setRecords(staffService.getStaffInfo(staff.getId()).getRecords()));
         return Response.SC_OK;
     }
     @GetMapping("/image/{name}")
@@ -73,18 +73,15 @@ public class StaffController {
     }
     @PostMapping(value = "/{id}")
     public Integer addRecord(@PathVariable Long id, @RequestBody IdDto idDto){
-        ClientRecord clientRecord = new ClientRecord().setDate(idDto.smth_needed).setUser(userService.getUserInfo(idDto.id));
+        Record record = new Record().setVisitDate(idDto.smth_needed);
         Staff staff = staffService.getStaffInfo(id);
-        List<ClientRecord> clientRecords = staff.getClientRecords();
-        clientRecords.add(clientRecord);
-        staff.setClientRecords(clientRecords);
-        Staff staff1 = staffService.saveStaff(staff);
-        Record record = new Record().setVisitDate(idDto.smth_needed).setStaff(staff).setClientRecordId(staff1.getClientRecords().get(staff1.getClientRecords().size() - 1).getId());
+        staffService.saveStaff(staff);
         User user = userService.getUserInfo(idDto.id);
-        List<Record> records = user.getRecords();
+        record.setStaff(staff).setUser(user);
+        List<Record> records = staff.getRecords();
         records.add(record);
-        user.setRecords(records);
-        userService.saveUser(user);
+        staff.setRecords(records);
+        staffService.saveStaff(staff);
         return Response.SC_OK;
     }
     @GetMapping("/comment/{id}")

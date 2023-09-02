@@ -35,7 +35,7 @@ public class UserController  {
                 .block();
         model.addAttribute("user", userInfoDto);
         model.addAttribute("id", userInfoDto.id);
-        return "profile";
+        return "user_profile";
     }
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/edit_profile")
@@ -46,7 +46,7 @@ public class UserController  {
                 .bodyToMono(UserInfoDto.class)
                 .block();
         model.addAttribute("userInfoDto", userInfoDto);
-        return "edit";
+        return "user_edit";
     }
     @PostMapping("/edit_profile")
     public String editProfilePage(UserInfoDto userInfoDto){
@@ -105,7 +105,6 @@ public class UserController  {
     }
     @PostMapping("/edit_record/{id}")
     public String editRecord(@PathVariable Long id, RecordDto recordDto){
-        recordDto.setClient_record_id(id);
         Integer a = webClient.put()
                 .uri("/server/user/record/" + id.toString())
                 .contentType(MediaType.APPLICATION_JSON)

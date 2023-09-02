@@ -1,13 +1,8 @@
 package com.example.privatehospital.Mappers;
 
-import com.example.privatehospital.DTOs.ClientRecordDto;
 import com.example.privatehospital.DTOs.RecordDto;
-import com.example.privatehospital.DTOs.StaffDto;
-import com.example.privatehospital.Entities.ClientRecord;
 import com.example.privatehospital.Entities.Record;
-import com.example.privatehospital.Entities.Staff;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper
 public interface RecordMapper {
@@ -21,6 +16,7 @@ public interface RecordMapper {
                 .setStaff_surname(record.getStaff().getSurname())
                 .setStaff_position(record.getStaff().getPosition())
                 .setStaff_department(record.getStaff().getDepartment())
-                .setClient_record_id(record.getClientRecordId());
+                .setUser_name(record.getUser().getName())
+                .setUser_surname(record.getUser().getSurname());
     }
 }

@@ -1,7 +1,7 @@
 package com.example.privatehospital.Services;
 
-import com.example.privatehospital.Entities.ClientRecord;
 import com.example.privatehospital.Entities.Comment;
+import com.example.privatehospital.Entities.Record;
 import com.example.privatehospital.Entities.Staff;
 import com.example.privatehospital.StaffFilter;
 import org.springframework.data.domain.Page;
@@ -17,7 +17,7 @@ public interface StaffService {
     Staff saveStaff(Staff staff);
     File getStaffImage(String staffTitle);
     Page<Staff> getAllStaff(StaffFilter filter, Pageable pageable);
-    List<ClientRecord> getFutureRecords(List<ClientRecord> records) throws ParseException;
+    List<Record> getFutureRecords(List<Record> records) throws ParseException;
     List<Comment> getAllComment(Long staffId);
     void deleteStaffById(Long id);
     void deleteCommentById(Long id);

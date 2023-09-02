@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public User getUserInfo(Long id) {
-        return userRepository.getUserById(id);
+        return userRepository.getUserByIdUser(id);
     }
 
     @Override
@@ -68,25 +68,16 @@ public class UserServiceImpl implements UserService {
             return matchingFiles[0];
         }
     }
-    public List<Record> getFutureRecords(List<Record> records) throws ParseException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date today = Calendar.getInstance().getTime();
-        ArrayList<Record> futureDates = new ArrayList<>();
-        for (Record record : records) {
-            Date currentDate = dateFormat.parse(record.getVisitDate());
-            if (currentDate.after(today)) {
-                futureDates.add(record);
-            }
-        }
-        return futureDates;
-    }
+    @Override
     public void addComment(Comment comment){
         commentRepository.save(comment);
     }
+    @Override
     public Record getRecordByClientRecordId(Long clientRecordId){
-        return recordRepository.getRecordByClientRecordId(clientRecordId);
+        return recordRepository.getRecordById(clientRecordId);
     }
+    @Override
     public void updateRecord(RecordDto recordDto){
-        recordRepository.updateRecordsField(recordDto.client_record_id, recordDto.description, recordDto.service, recordDto.price);
+        recordRepository.updateRecordsField(recordDto.id, recordDto.description, recordDto.service, recordDto.price);
     }
 }

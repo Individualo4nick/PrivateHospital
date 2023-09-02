@@ -5,7 +5,7 @@
     <title>Edit</title>
 </head>
 <body>
-<form th:action="@{/api/user/edit_record/{id}(id=${recordDto.client_record_id})}" method="post" th:object="${recordDto}">
+<form th:action="@{/api/user/edit_record/{id}(id=${recordDto.id})}" method="post" th:object="${recordDto}">
     <label for="description">Description
         <input type="text" name="description" id="description" th:value="*{description}">
     </label>

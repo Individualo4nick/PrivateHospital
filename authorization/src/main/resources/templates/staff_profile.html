@@ -16,16 +16,11 @@
     <p>Your upcoming records: </p>
     <div th:each="record: *{records}">
         <a th:href="${'/api/user/edit_record/' + record.id}" th:text="'Record № ' + ${record.id}"></a>
-        <p th:text="${record.date}"></p>
+        <p th:text="${record.visitDate}"></p>
         <p th:text="${record.user_name}"></p>
         <p th:text="${record.user_surname}"></p>
         <br>
     </div>
-</div>
-<div sec:authorize="hasAuthority('ADMIN')">
-    <form th:action="@{api/admin/delete_staff_page/{id}(id=${staff.id})}" method="post">
-        <input type="submit" value="Delete page">
-    </form>
 </div>
 <a href="/api/staff/edit_profile">Edit</a>
 </body>

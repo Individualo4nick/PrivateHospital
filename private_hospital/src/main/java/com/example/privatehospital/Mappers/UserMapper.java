@@ -27,8 +27,7 @@ public interface UserMapper {
                         .setStaff_name(record.getStaff().getName())
                         .setStaff_surname(record.getStaff().getSurname())
                         .setStaff_position(record.getStaff().getPosition())
-                        .setStaff_department(record.getStaff().getDepartment())
-                        .setClient_record_id(record.getClientRecordId()));
+                        .setStaff_department(record.getStaff().getDepartment()));
             }
         }
         return recordDtos;

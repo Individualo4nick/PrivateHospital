@@ -1,15 +1,10 @@
 package com.example.authorization.controller;
 
-import com.example.authorization.dtos.*;
-import com.example.authorization.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import java.text.ParseException;
 
 @Controller
 @RequestMapping("api/admin")
@@ -22,7 +17,7 @@ public class AdminController {
     @PostMapping("/delete_staff_page/{id}")
     public String deleteStaffPage(@PathVariable Long id) {
         Integer a = webClient.delete()
-                .uri("/server/admin/delete_staff" + id.toString())
+                .uri("/server/admin/delete_staff/" + id.toString())
                 .retrieve()
                 .bodyToMono(Integer.class)
                 .block();
@@ -32,7 +27,7 @@ public class AdminController {
     @PostMapping("/delete_comment/{id}")
     public String deleteComment(@PathVariable Long id, Long idStaff) {
         Integer a = webClient.delete()
-                .uri("/server/admin/delete_comment" + id.toString())
+                .uri("/server/admin/delete_comment/" + id.toString())
                 .retrieve()
                 .bodyToMono(Integer.class)
                 .block();

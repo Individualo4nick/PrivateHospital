@@ -4,10 +4,10 @@ import com.example.privatehospital.DTOs.IdDto;
 import com.example.privatehospital.DTOs.RecordDto;
 import com.example.privatehospital.DTOs.UserDto;
 import com.example.privatehospital.Entities.Comment;
-import com.example.privatehospital.Entities.Record;
 import com.example.privatehospital.Entities.User;
 import com.example.privatehospital.Mappers.RecordMapper;
 import com.example.privatehospital.Mappers.UserMapper;
+import com.example.privatehospital.Services.StaffService;
 import com.example.privatehospital.Services.UserService;
 
 import org.apache.catalina.connector.Response;
@@ -26,11 +26,13 @@ public class UserController {
     @Value("${files.path}")
     private String imagePath;
     private final UserService userService;
+    private final StaffService staffService;
     private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
     private final RecordMapper recordMapper = Mappers.getMapper(RecordMapper.class);
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, StaffService staffService) {
         this.userService = userService;
+        this.staffService = staffService;
     }
 
     @PostMapping("/registration")
@@ -42,7 +44,7 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDto getUserInfo(@PathVariable Long id) throws ParseException {
         User user = userService.getUserInfo(id);
-        user.setRecords(userService.getFutureRecords(user.getRecords()));
+        user.setRecords(staffService.getFutureRecords(user.getRecords()));
         return userMapper.userToUserDto(user);
     }
     @PutMapping

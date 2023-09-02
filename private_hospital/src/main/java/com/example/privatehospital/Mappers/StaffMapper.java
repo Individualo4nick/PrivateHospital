@@ -1,8 +1,8 @@
 package com.example.privatehospital.Mappers;
 
-import com.example.privatehospital.DTOs.ClientRecordDto;
+import com.example.privatehospital.DTOs.RecordDto;
 import com.example.privatehospital.DTOs.StaffDto;
-import com.example.privatehospital.Entities.ClientRecord;
+import com.example.privatehospital.Entities.Record;
 import com.example.privatehospital.Entities.Staff;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
@@ -13,21 +13,21 @@ import java.util.List;
 
 @Mapper
 public interface StaffMapper {
-    @Mapping(target = "records", source = "clientRecords")
+    @Mapping(target = "records", source = "records")
     StaffDto staffToStaffDto(Staff staff);
-    default List<ClientRecordDto> map(List<ClientRecord> field) {
-        ArrayList<ClientRecordDto> clientRecordDtos = new ArrayList<>();
+    default List<RecordDto> map(List<Record> field) {
+        ArrayList<RecordDto> recordDtos = new ArrayList<>();
         if (field!= null) {
-            for (ClientRecord clientRecord : field) {
-                clientRecordDtos.add(new ClientRecordDto()
-                        .setId(clientRecord.getId())
-                        .setDate(clientRecord.getDate())
-                        .setUser_id(clientRecord.getUser().getId())
-                        .setUser_name(clientRecord.getUser().getName())
-                        .setUser_surname(clientRecord.getUser().getSurname()));
+            for (Record record : field) {
+                recordDtos.add(new RecordDto()
+                        .setId(record.getId())
+                        .setVisitDate(record.getVisitDate())
+                        .setUser_id(record.getUser().getId())
+                        .setUser_name(record.getUser().getName())
+                        .setUser_surname(record.getUser().getSurname()));
             }
         }
-        return clientRecordDtos;
+        return recordDtos;
     }
     @IterableMapping(elementTargetType = StaffDto.class)
     List<StaffDto> arrayStaffToArrayStaffDto(Iterable<Staff> staff);

@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="en">
 <head>
+    <base href="/">
     <meta charset="UTF-8">
     <title>Profile</title>
 </head>
@@ -18,12 +19,8 @@
         <label for="recordDate">
             <input id="recordDate" name="recordDate" type="date" required>
         </label>
-        <label>
-
-        </label>
         <input type="submit" value="Make an appointment"/>
     </form>
-
     <h4 sec:authorize="hasAuthority('USER')">Write a comment</h4>
     <div sec:authorize="hasAuthority('USER')">
         <form th:action="@{/api/user/send_comment}" id="send_comment" method="post">
@@ -52,6 +49,11 @@
                 <input type="submit" value="Delete" style="display: flex; margin-bottom: 50px">
             </form>
         </div>
+    </div>
+    <div sec:authorize="hasAuthority('ADMIN')">
+        <form th:action="@{api/admin/delete_staff_page/{id}(id=${staffDto.id})}" method="post">
+            <input type="submit" value="Delete page">
+        </form>
     </div>
 </body>
 </html>

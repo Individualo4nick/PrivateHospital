@@ -14,5 +14,5 @@ public class StaffDto {
     public String surname;
     public String position;
     public String department;
-    public List<ClientRecordDto> records;
+    public List<RecordDto> records;
 }

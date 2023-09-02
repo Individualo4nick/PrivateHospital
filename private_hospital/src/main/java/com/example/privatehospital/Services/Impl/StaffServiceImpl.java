@@ -2,8 +2,8 @@ package com.example.privatehospital.Services.Impl;
 
 import static com.example.privatehospital.Entities.QStaff.staff;
 
-import com.example.privatehospital.Entities.ClientRecord;
 import com.example.privatehospital.Entities.Comment;
+import com.example.privatehospital.Entities.Record;
 import com.example.privatehospital.Entities.Staff;
 import com.example.privatehospital.Repositories.CommentRepository;
 import com.example.privatehospital.Repositories.QPredicates;
@@ -38,17 +38,16 @@ public class StaffServiceImpl implements StaffService {
         this.staffRepository = staffRepository;
         this.commentRepository = commentRepository;
     }
-
+    @Override
     public void saveStaffById(Long id){
         Staff staff = new Staff();
         staff.setId(id);
         staffRepository.save(staff);
     }
-
+    @Override
     public Staff getStaffInfo(Long id) {
         return staffRepository.getStaffById(id);
     }
-
     @Override
     public Staff saveStaff(Staff staff) {
         return staffRepository.save(staff);
@@ -73,14 +72,16 @@ public class StaffServiceImpl implements StaffService {
         }
     }
 
-    public List<ClientRecord> getFutureRecords(List<ClientRecord> records) throws ParseException {
+
+    @Override
+    public List<Record> getFutureRecords(List<Record> records) throws ParseException {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date today = Calendar.getInstance().getTime();
-        ArrayList<ClientRecord> futureDates = new ArrayList<>();
-        for (ClientRecord clientRecord : records) {
-            Date currentDate = dateFormat.parse(clientRecord.getDate());
+        ArrayList<Record> futureDates = new ArrayList<>();
+        for (Record record : records) {
+            Date currentDate = dateFormat.parse(record.getVisitDate());
             if (currentDate.after(today)) {
-                futureDates.add(clientRecord);
+                futureDates.add(record);
             }
         }
         return futureDates;
@@ -95,9 +96,11 @@ public class StaffServiceImpl implements StaffService {
     public List<Comment> getAllComment(Long staffId) {
         return commentRepository.findAllByStaffId(staffId);
     }
+    @Override
     public void deleteStaffById(Long id){
         staffRepository.deleteById(id);
     }
+    @Override
     public void deleteCommentById(Long id){
         commentRepository.deleteById(id);
     }
