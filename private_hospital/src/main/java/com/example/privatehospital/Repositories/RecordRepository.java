@@ -7,8 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface RecordRepository extends JpaRepository<Record, Long> {
-    Record getRecordById(Long clientRecordId);
+public interface RecordRepository extends JpaRepository<Record, Long>, CustomRecordRepository{
     @Modifying
     @Transactional
     @Query(value = "UPDATE Record r SET r.description=:description, r.service=:service, r.price=:price WHERE r.id=:id")

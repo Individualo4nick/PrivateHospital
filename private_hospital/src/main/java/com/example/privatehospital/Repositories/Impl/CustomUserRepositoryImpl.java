@@ -25,6 +25,6 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
             Staff staff = jdbcTemplate.queryForObject("SELECT * FROM staff WHERE id = (SELECT staff_id from records where user_id=" + id + " LIMIT 1)", new BeanPropertyRowMapper<>(Staff.class));
             record.setStaff(staff);
         }
-        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE id = " + id, new BeanPropertyRowMapper<>(User.class)).setRecords(records); //query("SELECT * FROM users WHERE id = " + id.toString(), new BeanPropertyRowMapper<>(User.class));
+        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE id = " + id, new BeanPropertyRowMapper<>(User.class)).setRecords(records);
     }
 }
