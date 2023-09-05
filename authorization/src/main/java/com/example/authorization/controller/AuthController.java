@@ -50,7 +50,13 @@ public class AuthController {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/login";
         } else {
-            final JwtResponse token = authService.login(authRequest);
+            final JwtResponse token;
+            try {
+                token = authService.login(authRequest);
+            }
+            catch (AuthException authException){
+                throw authException;
+            }
             Cookie cookie = new Cookie("access", token.getAccessToken());
             cookie.setMaxAge(3600);
             cookie.setHttpOnly(true);

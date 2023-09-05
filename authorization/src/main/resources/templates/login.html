@@ -17,5 +17,9 @@
     <p>Errors:</p>
     <p style="color: red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Errors</p>
 </div>
+<div th:if="${auth_error}">
+    <p>Error:</p>
+    <p style="color: red" th:text="${auth_error}">Errors</p>
+</div>
 </body>
 </html>
