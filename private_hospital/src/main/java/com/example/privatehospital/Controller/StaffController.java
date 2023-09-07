@@ -43,8 +43,12 @@ public class StaffController {
     @GetMapping(value = "/{id}")
     public StaffDto getStaffInfo(@PathVariable Long id) throws ParseException {
         Staff staff = staffService.getStaffInfo(id);
-        staff.setRecords(staffService.getFutureRecords(staff.getRecords()));
-        return staffMapper.staffToStaffDto(staff);
+        if(staff!=null) {
+            staff.setRecords(staffService.getFutureRecords(staff.getRecords()));
+            return staffMapper.staffToStaffDto(staff);
+        }
+        else
+            return null;
     }
     @PutMapping
     public Integer updateStaff(@RequestBody Staff staff){

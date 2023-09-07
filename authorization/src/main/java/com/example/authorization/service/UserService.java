@@ -26,4 +26,7 @@ public class UserService {
         user.setLogin(userReg.login).setPassword(SecurityConfig.passwordEncoder().encode(userReg.password)).setRole(userReg.role);
         userRepo.save(user);
     }
+    public void deleteUser(Long id){
+        userRepo.deleteById(id);
+    }
 }

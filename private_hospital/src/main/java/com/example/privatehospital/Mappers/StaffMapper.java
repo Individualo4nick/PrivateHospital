@@ -17,7 +17,7 @@ public interface StaffMapper {
     StaffDto staffToStaffDto(Staff staff);
     default List<RecordDto> map(List<Record> field) {
         ArrayList<RecordDto> recordDtos = new ArrayList<>();
-        if (field!= null) {
+        if (field!= null)  {
             for (Record record : field) {
                 recordDtos.add(new RecordDto()
                         .setId(record.getId())

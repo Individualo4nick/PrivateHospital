@@ -87,6 +87,8 @@ public class StaffController {
                 .retrieve()
                 .bodyToMono(StaffDto.class)
                 .block();
+        if (staffDto==null)
+            return "not_found";
         List<CommentDto> commentDtoList = webClient.get()
                         .uri("/server/staff/comment/"+id)
                         .retrieve()

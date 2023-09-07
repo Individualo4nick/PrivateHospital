@@ -23,7 +23,7 @@ public class Record {
     @ManyToOne
     @JoinColumn(name = "staff_id")
     private Staff staff;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
 }

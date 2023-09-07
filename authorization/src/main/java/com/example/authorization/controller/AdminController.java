@@ -1,7 +1,9 @@
 package com.example.authorization.controller;
 
+import com.example.authorization.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -12,6 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class AdminController {
 
     private final WebClient webClient = WebClient.create("http://localhost:8888");
+    private final UserService userService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/delete_staff_page/{id}")
@@ -21,6 +24,7 @@ public class AdminController {
                 .retrieve()
                 .bodyToMono(Integer.class)
                 .block();
+        userService.deleteUser(id);
         return "redirect:/api/staff/all";
     }
     @PreAuthorize("hasAuthority('ADMIN')")
