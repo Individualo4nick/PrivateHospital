@@ -11,11 +11,23 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class LoggingAspect {
-    @Pointcut("bean(*Controller) || bean(*Service) || bean(UserRepo) || bean(Jwt*)")
-    public void loggingPointcut(){}
+    @Pointcut("within(com.example.authorization.controller.*)")
+    public void isController(){}
+    @Pointcut("within(com.example.authorization.service.*)")
+    public void isService(){}
+    @Pointcut("within(com.example.authorization.repo.*)")
+    public void isRepo(){}
 
-    @Before("loggingPointcut()")
-    public void loggingMethod(JoinPoint joinPoint){
-        log.info("Invoked " + joinPoint.getSignature().getName() + " method");
+    @Before("isController()")
+    public void controllerLoggingMethod(JoinPoint joinPoint){
+        log.info("Invoked " + joinPoint.getSignature().getName() + " method in controller");
+    }
+    @Before("isService()")
+    public void serviceLoggingMethod(JoinPoint joinPoint){
+        log.info("Invoked " + joinPoint.getSignature().getName() + " method in service");
+    }
+    @Before("isRepo()")
+    public void repoLoggingMethod(JoinPoint joinPoint){
+        log.info("Invoked " + joinPoint.getSignature().getName() + " method in repo");
     }
 }

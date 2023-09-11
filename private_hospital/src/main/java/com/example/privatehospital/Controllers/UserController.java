@@ -1,4 +1,4 @@
-package com.example.privatehospital.Controller;
+package com.example.privatehospital.Controllers;
 
 import com.example.privatehospital.DTOs.IdDto;
 import com.example.privatehospital.DTOs.RecordDto;

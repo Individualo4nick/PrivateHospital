@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@EnableAspectJAutoProxy(proxyTargetClass=true)
 @ComponentScan("com.example.authorization")
 public class SecurityConfig {
 
