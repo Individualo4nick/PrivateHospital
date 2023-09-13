@@ -20,7 +20,13 @@ public class Staff {
     private String surname;
     private String position="";
     private String department="";
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "staff", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "staff", fetch = FetchType.EAGER)
     private List<Record> records;
+    @PreRemove
+    private void preRemove(){
+        for(Record record : records){
+            record.setStaff(null);
+        }
+    }
 
 }

@@ -5,6 +5,7 @@ import static com.example.privatehospital.Entities.QStaff.staff;
 import com.example.privatehospital.Entities.Comment;
 import com.example.privatehospital.Entities.Record;
 import com.example.privatehospital.Entities.Staff;
+import com.example.privatehospital.Listener.EntityEvent;
 import com.example.privatehospital.Repositories.CommentRepository;
 import com.example.privatehospital.Repositories.QPredicates;
 import com.example.privatehospital.Repositories.StaffRepository;
@@ -12,6 +13,7 @@ import com.example.privatehospital.Services.StaffService;
 import com.example.privatehospital.StaffFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,13 +30,15 @@ import java.util.List;
 
 @Service
 public class StaffServiceImpl implements StaffService {
+    private final ApplicationEventPublisher eventPublisher;
     private final StaffRepository staffRepository;
     private final CommentRepository commentRepository;
     @Value("${files.path}")
     private String imagePath;
 
     @Autowired
-    public StaffServiceImpl(StaffRepository staffRepository, CommentRepository commentRepository) {
+    public StaffServiceImpl(ApplicationEventPublisher eventPublisher, StaffRepository staffRepository, CommentRepository commentRepository) {
+        this.eventPublisher = eventPublisher;
         this.staffRepository = staffRepository;
         this.commentRepository = commentRepository;
     }
@@ -98,6 +102,8 @@ public class StaffServiceImpl implements StaffService {
     }
     @Override
     public void deleteStaffById(Long id){
+        Object object = new Object();
+        eventPublisher.publishEvent(new EntityEvent(object, id));
         staffRepository.deleteById(id);
     }
     @Override
