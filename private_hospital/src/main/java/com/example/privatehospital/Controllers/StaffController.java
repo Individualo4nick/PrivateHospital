@@ -73,6 +73,7 @@ public class StaffController {
             page = staffService.getAllStaff(filter, PageRequest.of(0, staffFilterDto.size));
         else
             page = staffService.getAllStaff(filter, PageRequest.of(0, 20));
+        //return new PageResponse.of(page);
         return new PageResponse().setContent(staffMapper.arrayStaffToArrayStaffDto(page.getContent())).setPage(page.getNumber()).setSize(page.getSize());
     }
     @PostMapping(value = "/{id}")

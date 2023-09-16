@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class User {
+public class User extends AuditionEntity{
     @Id
     private Long id;
     private String email;
