@@ -5,6 +5,7 @@
     <title>Profile</title>
 </head>
 <body>
+<div th:insert="~{header.html}"></div>
 <label>Your profile: </label>
 <div th:object="${user}">
     <img width="200" height="200" th:src="${'/api/user/image/' + id}">

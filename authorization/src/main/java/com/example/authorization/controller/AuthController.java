@@ -31,7 +31,7 @@ public class AuthController {
     private final WebClient webClient = WebClient.create("http://localhost:8888");
 
 
-    @GetMapping("/main")
+    @GetMapping("/")
     public String mainPage() {
         return "main";
     }
@@ -65,7 +65,7 @@ public class AuthController {
             cookie1.setHttpOnly(true);
             response.addCookie(cookie);
             response.addCookie(cookie1);
-            return "redirect:/main";
+            return "redirect:/";
         }
     }
 

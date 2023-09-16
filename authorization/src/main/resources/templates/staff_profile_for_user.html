@@ -7,6 +7,7 @@
     <title>Profile</title>
 </head>
 <body>
+<div th:insert="~{header.html}"></div>
     <div th:object="${staffDto}">
         <img width="200" height="200" th:src="${'/api/staff/image/' + id}" alt="">
         <p th:text="*{'Email: ' + email}"></p>

@@ -5,6 +5,7 @@
     <title>Title</title>
 </head>
 <body>
+<div th:insert="~{header.html}"></div>
 <form th:action="@{/api/user/edit_profile}" method="post" th:object="${userInfoDto}">
     <label for="email">Email
     <input type="email" name="email" id="email" th:value="*{email}">

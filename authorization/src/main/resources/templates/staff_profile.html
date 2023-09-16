@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Profile</title>
 </head>
 <body>
+<div th:insert="~{header.html}"></div>
 <div th:object="${staff}">
     <img width="200" height="200" th:src="${'/api/staff/image/' + id}" alt="">
     <p th:text="*{'Email: ' + email}"></p>

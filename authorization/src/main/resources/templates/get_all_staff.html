@@ -5,6 +5,7 @@
     <title>All staff</title>
 </head>
 <body>
+<div th:insert="~{header.html}"></div>
 <form action="/api/staff/all">
     <label for="position">Position:
         <input id="position" name="position" type="text" th:value="${staffFilterDto.position}">

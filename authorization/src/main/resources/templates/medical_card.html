@@ -5,6 +5,7 @@
     <title>Medical card</title>
 </head>
 <body>
+<div th:insert="~{header.html}"></div>
 <div th:object="${user}">
     <p>Your medical card: </p>
     <div th:each="record: *{records}">

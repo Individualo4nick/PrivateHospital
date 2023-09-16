@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+>
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    ul {
+        list-style-type: none;
+        display : flex;
+    }
+    li {
+        padding: 30px;
+    }
+    a {
+        color: #000 !important;
+        text-decoration: none
+    }
+</style>
+<header>
+    <nav>
+        <ul>
+            <li><strong>Private Hospital</strong></li>
+            <li><a href="/">Main</a></li>
+            <li sec:authorize="isAnonymous()" ><a href="/login">Log-in</a></li>
+            <li sec:authorize="isAnonymous()"><a href="/registration">Registration</a></li>
+            <li sec:authorize="hasAuthority('USER')" style="border-bottom: none;"><a href="api/user/profile">Profile</a></li>
+            <li sec:authorize="hasAuthority('STAFF')" style="border-bottom: none;"><a href="api/staff/profile">Profile</a></li>
+            <li sec:authorize="isAuthenticated()" style="border-bottom: none"><a href="api/staff/all">All staff</a></li>
+        </ul>
+    </nav>
+</header>
