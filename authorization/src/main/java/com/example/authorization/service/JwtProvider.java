@@ -60,22 +60,12 @@ public class JwtProvider {
                 .compact();
     }
 
-    public boolean validateAccessToken(@NonNull String accessToken) throws ExpiredJwtException {
-        try {
-            return validateToken(accessToken, jwtAccessSecret);
-        }
-        catch (ExpiredJwtException expEx){
-            throw expEx;
-        }
+    public void validateAccessToken(@NonNull String accessToken) {
+        validateToken(accessToken, jwtAccessSecret);
     }
 
     public boolean validateRefreshToken(String refreshToken) {
-        try {
-            return validateToken(refreshToken, jwtRefreshSecret);
-        }
-        catch (ExpiredJwtException expEx){
-            throw expEx;
-        }
+        return validateToken(refreshToken, jwtRefreshSecret);
     }
 
     private boolean validateToken(@NonNull String token, @NonNull Key secret) {

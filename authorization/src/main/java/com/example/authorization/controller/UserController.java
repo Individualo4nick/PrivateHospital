@@ -51,7 +51,7 @@ public class UserController  {
     @PostMapping("/edit_profile")
     public String editProfilePage(UserInfoDto userInfoDto){
         userInfoDto.id = userService.getUserId();
-        webClient.put()
+        webClient.patch()
                 .uri("/server/user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(userInfoDto), UserInfoDto.class)
@@ -105,7 +105,7 @@ public class UserController  {
     }
     @PostMapping("/edit_record/{id}")
     public String editRecord(@PathVariable Long id, RecordDto recordDto){
-        Integer a = webClient.put()
+        Integer a = webClient.patch()
                 .uri("/server/user/record/" + id.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(recordDto), RecordDto.class)

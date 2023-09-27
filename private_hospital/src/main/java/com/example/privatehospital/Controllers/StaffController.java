@@ -37,7 +37,7 @@ public class StaffController {
     @PostMapping(value = "/registration")
     public Integer saveStaff(@RequestBody IdDto idDto){
         staffService.saveStaffById(idDto.id);
-        return Response.SC_OK;
+        return Response.SC_CREATED;
     }
 
     @GetMapping(value = "/{id}")
@@ -50,7 +50,7 @@ public class StaffController {
         else
             return null;
     }
-    @PutMapping
+    @PatchMapping
     public Integer updateStaff(@RequestBody Staff staff){
         staffService.saveStaff(staff.setRecords(staffService.getStaffInfo(staff.getId()).getRecords()));
         return Response.SC_OK;

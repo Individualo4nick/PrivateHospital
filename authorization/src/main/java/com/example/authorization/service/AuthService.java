@@ -37,21 +37,16 @@ public class AuthService {
     }
 
     public JwtResponse getAccessToken(@NonNull String refreshToken) throws AuthException {
-        try {
-            if (jwtProvider.validateRefreshToken(refreshToken)) {
-                final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
-                final String login = claims.getSubject();
-                final String saveRefreshToken = refreshStorage.get(login);
-                if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                    final User user = userService.getByLogin(login).
-                            orElseThrow(() -> new AuthException("Пользователь не найден"));
-                    final String accessToken = jwtProvider.generateAccessToken(user);
-                    return new JwtResponse(accessToken, null);
-                }
+        if (jwtProvider.validateRefreshToken(refreshToken)) {
+            final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
+            final String login = claims.getSubject();
+            final String saveRefreshToken = refreshStorage.get(login);
+            if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
+                final User user = userService.getByLogin(login).
+                        orElseThrow(() -> new AuthException("Пользователь не найден"));
+                final String accessToken = jwtProvider.generateAccessToken(user);
+                return new JwtResponse(accessToken, null);
             }
-        }
-        catch (ExpiredJwtException expEx){
-            throw expEx;
         }
         return new JwtResponse(null, null);
     }

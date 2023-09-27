@@ -38,7 +38,7 @@ public class StaffController {
     @PostMapping("/edit_profile")
     public String editProfilePage(StaffDto staffDto){
         staffDto.id = userService.getUserId();
-        webClient.put()
+        webClient.patch()
                 .uri("/server/staff")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(staffDto), StaffDto.class)

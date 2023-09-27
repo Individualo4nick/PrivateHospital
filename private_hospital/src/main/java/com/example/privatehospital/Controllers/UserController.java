@@ -38,7 +38,7 @@ public class UserController {
     @PostMapping("/registration")
     public Integer saveUser(@RequestBody IdDto idDto){
         userService.saveUserById(idDto.id);
-        return Response.SC_OK;
+        return Response.SC_CREATED;
     }
 
     @GetMapping("/{id}")
@@ -47,7 +47,7 @@ public class UserController {
         user.setRecords(staffService.getFutureRecords(user.getRecords()));
         return userMapper.userToUserDto(user);
     }
-    @PutMapping
+    @PatchMapping
     public Integer updateUser(@RequestBody User user){
         userService.saveUser(user.setRecords(userService.getUserInfo(user.getId()).getRecords()));
         return Response.SC_OK;
@@ -73,7 +73,7 @@ public class UserController {
     public RecordDto getRecord(@PathVariable Long id){
         return recordMapper.recordToRecordDto(userService.getRecordByClientRecordId(id));
     }
-    @PutMapping("/record/{id}")
+    @PatchMapping("/record/{id}")
     public Integer updateRecord(@RequestBody RecordDto recordDto){
         userService.updateRecord(recordDto);
         return Response.SC_OK;
