@@ -20,7 +20,7 @@ public class Staff extends AuditionEntity{
     private String surname;
     private String position="";
     private String department="";
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "staff", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "staff", fetch = FetchType.EAGER)
     private List<Record> records;
     @PreRemove
     private void preRemove(){

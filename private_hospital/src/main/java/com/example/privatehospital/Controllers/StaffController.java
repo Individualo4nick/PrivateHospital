@@ -80,12 +80,13 @@ public class StaffController {
     public Integer addRecord(@PathVariable Long id, @RequestBody IdDto idDto){
         Record record = new Record().setVisitDate(idDto.smth_needed);
         Staff staff = staffService.getStaffInfo(id);
-        staffService.saveStaff(staff);
         User user = userService.getUserInfo(idDto.id);
         record.setStaff(staff).setUser(user);
         List<Record> records = staff.getRecords();
         records.add(record);
         staff.setRecords(records);
+        System.out.println(record.getVisitDate());
+        System.out.println(record.getStaff().getId());
         staffService.saveStaff(staff);
         return Response.SC_OK;
     }

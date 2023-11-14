@@ -101,9 +101,11 @@ public class StaffController {
     }
     @PostMapping("/{id}")
     public String makeAppointment(@PathVariable String id, String recordDate) {
+        System.out.println(id);
         IdDto idDto = new IdDto();
         idDto.id = userService.getUserId();
         idDto.smth_needed = recordDate;
+        System.out.println(idDto.id);
         webClient.post()
                 .uri("/server/staff/"+id)
                 .contentType(MediaType.APPLICATION_JSON)
