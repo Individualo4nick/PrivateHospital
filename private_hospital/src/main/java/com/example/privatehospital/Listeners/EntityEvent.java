@@ -1,4 +1,4 @@
-package com.example.privatehospital.Listener;
+package com.example.privatehospital.Listeners;
 
 import lombok.Getter;
 

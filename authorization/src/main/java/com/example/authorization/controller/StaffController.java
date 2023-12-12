@@ -3,6 +3,7 @@ package com.example.authorization.controller;
 import com.example.authorization.dtos.*;
 import com.example.authorization.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +21,7 @@ import java.util.List;
 public class StaffController {
 
     private final UserService userService;
-    private final WebClient webClient = WebClient.create("http://localhost:8888");
+    private final WebClient webClient = WebClient.create("http://privatehospital:8888");
 
 
     @PreAuthorize("hasAuthority('STAFF')")
@@ -101,11 +102,9 @@ public class StaffController {
     }
     @PostMapping("/{id}")
     public String makeAppointment(@PathVariable String id, String recordDate) {
-        System.out.println(id);
         IdDto idDto = new IdDto();
         idDto.id = userService.getUserId();
         idDto.smth_needed = recordDate;
-        System.out.println(idDto.id);
         webClient.post()
                 .uri("/server/staff/"+id)
                 .contentType(MediaType.APPLICATION_JSON)

@@ -28,7 +28,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final UserService userService;
-    private final WebClient webClient = WebClient.create("http://localhost:8888");
+    private final WebClient webClient = WebClient.create("http://privatehospital:8888");
 
 
     @GetMapping("/")

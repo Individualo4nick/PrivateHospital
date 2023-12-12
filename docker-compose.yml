@@ -1,0 +1,47 @@
+version: "3.9"
+services:
+  authorization:
+    build:
+      context: ./authorization
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - authorization_db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://authorization_db:5432/authorization
+
+  privatehospital:
+    build:
+      context: ./private_hospital
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    depends_on:
+      - hospital_db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://hospital_db:5432/hospital
+
+  authorization_db:
+    image: postgres
+    restart: always
+    volumes:
+      - ./sql/schema-postgresql.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=wtf2281337
+      - POSTGRES_DB=authorization
+    ports:
+      - "5432:5432"
+
+  hospital_db:
+    image: postgres
+    restart: always
+    volumes:
+      - ./sql/schema-postgresql.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=wtf2281337
+      - POSTGRES_DB=hospital
+    ports:
+      - "5433:5432"

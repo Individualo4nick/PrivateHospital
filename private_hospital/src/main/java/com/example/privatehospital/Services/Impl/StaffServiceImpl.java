@@ -5,7 +5,7 @@ import static com.example.privatehospital.Entities.QStaff.staff;
 import com.example.privatehospital.Entities.Comment;
 import com.example.privatehospital.Entities.Record;
 import com.example.privatehospital.Entities.Staff;
-import com.example.privatehospital.Listener.EntityEvent;
+import com.example.privatehospital.Listeners.EntityEvent;
 import com.example.privatehospital.Repositories.CommentRepository;
 import com.example.privatehospital.Repositories.QPredicates;
 import com.example.privatehospital.Repositories.StaffRepository;

@@ -1,5 +1,6 @@
 package com.example.privatehospital.Services;
 
+import com.example.privatehospital.DTOs.StaffDto;
 import com.example.privatehospital.Entities.Comment;
 import com.example.privatehospital.Entities.Record;
 import com.example.privatehospital.Entities.Staff;

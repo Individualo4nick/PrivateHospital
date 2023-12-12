@@ -12,7 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class AdminController {
 
-    private final WebClient webClient = WebClient.create("http://localhost:8888");
+    private final WebClient webClient = WebClient.create("http://privatehospital:8888");
     private final UserService userService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
