@@ -18,7 +18,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/delete_staff_page/{id}")
     public String deleteStaffPage(@PathVariable Long id) {
-        Integer a = webClient.delete()
+        webClient.delete()
                 .uri("/server/admin/delete_staff/" + id.toString())
                 .retrieve()
                 .bodyToMono(Integer.class)
@@ -29,7 +29,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/delete_comment/{id}")
     public String deleteComment(@PathVariable Long id, Long idStaff) {
-        Integer a = webClient.delete()
+        webClient.delete()
                 .uri("/server/admin/delete_comment/" + id.toString())
                 .retrieve()
                 .bodyToMono(Integer.class)
